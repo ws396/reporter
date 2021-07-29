@@ -25,5 +25,11 @@
         "tailwindcss": "^2.1.2",
         "vue": "^3.0.5",
         "vue-loader": "^16.1.2"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.9.2",
+        "js-datepicker": "^5.18.0",
+        "vue-flatpickr-component": "^9.0.4",
+        "vue3-datepicker": "^0.2.5"
     }
 }

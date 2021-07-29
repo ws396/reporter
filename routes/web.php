@@ -15,6 +15,7 @@ use Inertia\Inertia;
 |
 */
 
+/*
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -23,9 +24,37 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+*/
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::group(['middleware' => 'auth'], function () {
 
-require __DIR__.'/auth.php';
+    Route::get('/', function () {
+        return Inertia::render('Index');
+    })->name('index');
+
+    Route::group([
+        'prefix' => 'admin',
+        'middleware' => 'is_admin',
+        'as' => 'admin.'
+    ], function () {
+
+        Route::get('tasklist', [App\Http\Controllers\User\TaskController::class, 'index'])->name('tasklist');
+
+    });
+
+
+    Route::group([
+        'prefix' => 'user',
+        'as' => 'user.'
+    ], function () {
+
+        Route::get('tasks', [App\Http\Controllers\User\TaskController::class, 'index'])->name('tasks');
+        Route::get('tasks/create', [App\Http\Controllers\User\TaskController::class, 'create'])->name('tasks.create');
+        Route::post('tasks', [App\Http\Controllers\User\TaskController::class, 'store'])->name('tasks.store');
+        Route::get('tasks/{task}/edit', [App\Http\Controllers\User\TaskController::class, 'edit'])->name('tasks.edit');
+
+    });
+
+});
+
+require __DIR__ . '/auth.php';
