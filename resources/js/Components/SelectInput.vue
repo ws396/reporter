@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <label v-if="label" class="form-label" :for="id">{{ label }}:</label>
-    <select :id="id" ref="input" v-model="selected" v-bind="$attrs" class="form-select" :class="{ error: error }">
+  <div class="pr-6 pb-8 w-full lg:w-1/2">
+    <label v-if="label" class="block" :for="id">{{ label }}:</label>
+    <select :id="id" ref="input" v-model="selected" :value="modelValue" v-bind="$attrs" class="form-select w-full" :class="{ error: error }">
       <slot />
     </select>
     <div v-if="error" class="form-error">{{ error }}</div>
@@ -15,13 +15,14 @@ export default {
     id: {
       type: String,
     },
-    value: [String, Number, Boolean],
+    //value: [String, Number, Boolean],
+    modelValue: String,
     label: String,
     error: String,
   },
   data() {
     return {
-      selected: this.value,
+      selected: this.modelValue,
     }
   },
   watch: {

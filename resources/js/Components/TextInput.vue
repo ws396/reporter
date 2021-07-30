@@ -1,7 +1,7 @@
 <template>
     <div class="pr-6 pb-8 w-full lg:w-1/2">
-        <label v-if="label" class="form-label" :for="id">{{ label }}:</label>
-        <input :id="id" ref="input" v-bind="$attrs" class="form-input" :class="{ error: error }" :type="type" :value="modelValue"
+        <label v-if="label" class="block" :for="id">{{ label }}:</label>
+        <input :id="id" ref="input" v-bind="$attrs" class="form-input w-full" :class="{ error: error }" :type="type" :value="modelValue"
                @input="$emit('update:modelValue', $event.target.value)"/>
         <div v-if="error" class="form-error">{{ error }}</div>
     </div>

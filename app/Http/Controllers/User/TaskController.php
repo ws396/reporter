@@ -22,7 +22,10 @@ class TaskController extends Controller
             ->through(function ($task) {
                 return [
                     'id' => $task->id,
-                    'project' =>$task->project,
+                    'project' => $task->project,
+                    'task_start' => $task->task_start,
+                    'task_worktime' => $task->task_worktime,
+                    'created_at' => $task->created_at,
                     'deleted_at' => $task->deleted_at,
                 ];
             });
@@ -31,24 +34,6 @@ class TaskController extends Controller
             'filters' => Request::all('search', 'trashed'),
             'tasks' => $tasks,
         ]);
-
-        /*
-        return Inertia::render('tasks/Index', [
-            'filters' => Request::all('search', 'trashed'),
-            'tasks' => Auth::user()->account->tasks()
-                ->orderBy('name')
-                ->filter(Request::only('search', 'trashed'))
-                ->paginate(10)
-                ->withQueryString()
-                ->through(fn ($task) => [
-                    'id' => $task->id,
-                    'name' => $task->name,
-                    'phone' => $task->phone,
-                    'city' => $task->city,
-                    'deleted_at' => $task->deleted_at,
-                ]),
-        ]);
-        */
     }
 
     public function create()
@@ -58,22 +43,7 @@ class TaskController extends Controller
 
     public function store(\Illuminate\Http\Request $request)
     {
-        /*
-        $item = Auth::user()->tasks()->create(
-            Request::validate([
-                'project' => ['required', 'max:100'],
-                'team_id' => ['nullable', 'max:50'],
-                'task_start' => ['nullable', 'max:50'],
-                'task_end' => ['nullable', 'max:150'],
-                'city' => ['nullable', 'max:50'],
-                'region' => ['nullable', 'max:50'],
-                'country' => ['nullable', 'max:2'],
-                'postal_code' => ['nullable', 'max:25'],
-            ])
-        );
-        */
-
-        $task= new Task;
+        $task = new Task;
 
         $task->user_id = Auth::id();
         $task->team_id = 0;
@@ -81,7 +51,7 @@ class TaskController extends Controller
         $task->task_end = Carbon::parse($request->task_end);
         $task->project = $request->project;
         $task->task_description = $request->task_description;
-        $task->task_worktime = Carbon::parse("15:04");
+        $task->task_worktime = Carbon::parse($request->task_worktime);
 
         $task->save();
 
@@ -93,19 +63,43 @@ class TaskController extends Controller
         return Inertia::render('User/Tasks/Edit', [
             'task' => [
                 'id' => $task->id,
-                /*
-                'name' => $task->name,
-                'email' => $task->email,
-                'phone' => $task->phone,
-                'address' => $task->address,
-                'city' => $task->city,
-                'region' => $task->region,
-                'country' => $task->country,
-                'postal_code' => $task->postal_code,
+                'project' => $task->project,
+                'task_start' => $task->task_start,
+                'task_end' => $task->task_end,
+                'task_description' => $task->task_description,
+                'task_worktime' => $task->task_worktime,
+                'created_at' => $task->created_at,
                 'deleted_at' => $task->deleted_at,
-                'contacts' => $task->contacts()->orderByName()->get()->map->only('id', 'name', 'city', 'phone'),
-                */
             ],
         ]);
+    }
+
+    public function update(Task $task, \Illuminate\Http\Request $request)
+    {
+        $task->user_id = Auth::id();
+        $task->team_id = 0;
+        $task->task_start = Carbon::parse($request->task_start);
+        $task->task_end = Carbon::parse($request->task_end);
+        $task->project = $request->project;
+        $task->task_description = $request->task_description;
+        $task->task_worktime = Carbon::parse($request->task_worktime);
+
+        $task->save();
+
+        return Redirect::back()->with('success', 'Task updated.');
+    }
+
+    public function destroy(Task $task)
+    {
+        $task->delete();
+
+        return Redirect::back()->with('success', 'Task deleted.');
+    }
+
+    public function restore(Task $task)
+    {
+        $task->restore();
+
+        return Redirect::back()->with('success', 'Task restored.');
     }
 }

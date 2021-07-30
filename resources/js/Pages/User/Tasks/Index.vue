@@ -1,12 +1,6 @@
 <template>
     <breeze-authenticated-layout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Список задач
-            </h2>
-        </template>
 
-        
         <inertia-link
             class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
             :href="route('user.tasks.create')">Добавить задачу
@@ -15,7 +9,9 @@
             <tr class="text-left font-bold">
                 <th class="px-6 pt-6 pb-4">Id</th>
                 <th class="px-6 pt-6 pb-4">Проект</th>
-                <th class="px-6 pt-6 pb-4" colspan="2">Создано</th>
+                <th class="px-6 pt-6 pb-4">Создано</th>
+                <th class="px-6 pt-6 pb-4">Начато</th>
+                <th class="px-6 pt-6 pb-4">Проработано</th>
             </tr>
             <tr v-for="task in tasks.data" :key="task.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                 <td class="border-t">
@@ -33,6 +29,16 @@
                 <td class="border-t">
                     <inertia-link class="px-6 py-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
                         {{ task.created_at }}
+                    </inertia-link>
+                </td>
+                <td class="border-t">
+                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
+                        {{ task.task_start }}
+                    </inertia-link>
+                </td>
+                <td class="border-t">
+                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
+                        {{ task.task_worktime }}
                     </inertia-link>
                 </td>
                 <td class="border-t w-px">
@@ -56,6 +62,7 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
 import BreezeButton from '@/Components/Button'
 import PaginationPing from '@/Components/PaginationPing'
+import Icon from '@/Components/Icon'
 
 import pickBy from 'lodash/pickBy'
 import throttle from 'lodash/throttle'
@@ -65,7 +72,8 @@ export default {
     components: {
         BreezeAuthenticatedLayout,
         BreezeButton,
-        PaginationPing
+        PaginationPing,
+        Icon
     },
     props: {
         filters: Object,
@@ -88,7 +96,7 @@ export default {
         }
     },
     created() {
-        console.log(this.tasks.links);
+        console.log(this.$page);
     },
     methods: {
         getTasks() {
