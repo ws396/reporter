@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,7 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'admin.'
     ], function () {
 
-        Route::get('tasklist', [App\Http\Controllers\User\TaskController::class, 'index'])->name('tasklist');
+        Route::get('tasklist', [User\TaskController::class, 'index'])->name('tasklist');
 
     });
 
@@ -48,13 +50,26 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'user.'
     ], function () {
 
-        Route::get('tasks', [App\Http\Controllers\User\TaskController::class, 'index'])->name('tasks');
-        Route::get('tasks/create', [App\Http\Controllers\User\TaskController::class, 'create'])->name('tasks.create');
-        Route::post('tasks', [App\Http\Controllers\User\TaskController::class, 'store'])->name('tasks.store');
-        Route::get('tasks/{task}/edit', [App\Http\Controllers\User\TaskController::class, 'edit'])->name('tasks.edit');
-        Route::put('tasks/{task}', [App\Http\Controllers\User\TaskController::class, 'update'])->name('tasks.update');
-        Route::delete('tasks/{task}', [App\Http\Controllers\User\TaskController::class, 'destroy'])->name('tasks.destroy');
-        Route::put('tasks/{task}/restore', [App\Http\Controllers\User\TaskController::class, 'restore'])->name('tasks.restore');
+        Route::get('projects', [User\ProjectController::class, 'index'])->name('projects');
+        Route::get('projects/create', [User\ProjectController::class, 'create'])->name('projects.create');
+        Route::post('projects', [User\ProjectController::class, 'store'])->name('projects.store');
+        Route::get('projects/{project}/edit', [User\ProjectController::class, 'edit'])->name('projects.edit');
+        Route::put('projects/{project}', [User\ProjectController::class, 'update'])->name('projects.update');
+        Route::delete('projects/{project}', [User\ProjectController::class, 'destroy'])->name('projects.destroy');
+        Route::put('projects/{project}/restore', [User\ProjectController::class, 'restore'])->name('projects.restore');
+
+        Route::group([
+            'prefix' => 'projects/{project}',
+            'as' => 'projects.'
+        ], function () {
+            Route::get('tasks', [User\TaskController::class, 'index'])->name('tasks');
+            Route::get('tasks/create', [User\TaskController::class, 'create'])->name('tasks.create');
+            Route::post('tasks', [User\TaskController::class, 'store'])->name('tasks.store');
+            Route::get('tasks/{task}/edit', [User\TaskController::class, 'edit'])->name('tasks.edit');
+            Route::put('tasks/{task}', [User\TaskController::class, 'update'])->name('tasks.update');
+            Route::delete('tasks/{task}', [User\TaskController::class, 'destroy'])->name('tasks.destroy');
+            Route::put('tasks/{task}/restore', [User\TaskController::class, 'restore'])->name('tasks.restore');
+        });
 
     });
 

@@ -15,8 +15,8 @@
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <breeze-nav-link :href="route('user.tasks')" :active="route().current('user.tasks')">
-                                    Список задач
+                                <breeze-nav-link :href="route('user.projects')" :active="route().current('user.projects')">
+                                    Список проектов
                                 </breeze-nav-link>
                             </div>
                         </div>
@@ -68,8 +68,8 @@
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <breeze-responsive-nav-link :href="route('user.tasks')" :active="route().current('user.tasks')">
-                            Список задач
+                        <breeze-responsive-nav-link :href="route('user.projects')" :active="route().current('user.projects')">
+                            Список проектов
                         </breeze-responsive-nav-link>
                     </div>
 
@@ -95,9 +95,9 @@
                     <slot name="header"/>
                 </div>
             </header>
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <flash-messages />
-            </div>
+
+            <flash-messages />
+
 
             <!-- Page Content -->
             <main>

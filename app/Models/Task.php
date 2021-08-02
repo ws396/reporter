@@ -17,11 +17,16 @@ class Task extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'tasks_users', 'task_id', 'user_id')
+            //->withTimestamps()
+            ->withPivot(['is_taskgiver']);
+    }
 
-        //return $this->hasOne('App\Models\User', 'id', 'user_id');
+    public function projects()
+    {
+        return $this->hasOne(Project::class);
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -29,11 +34,10 @@ class Task extends Model
         return $this->where($field ?? 'id', $value)->withTrashed()->firstOrFail();
     }
 
-
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {
-            $query->where('project', 'like', '%' . $search . '%');
+            $query->where('id', 'like', '%' . $search . '%');
         })->when($filters['trashed'] ?? null, function ($query, $trashed) {
             if ($trashed === 'with') {
                 $query->withTrashed();
@@ -47,14 +51,25 @@ class Task extends Model
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d-m-Y H:i:s');
     }
-
     public function getUpdatedAtAttribute($date)
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d-m-Y H:i:s');
     }
-
     public function getTaskWorktimeAttribute($date)
     {
         return Carbon::createFromFormat('H:i:s', $date)->format('H ч. i мин.');
+    }
+
+    public function setTaskStartAttribute($date)
+    {
+        $this->attributes['task_start'] = Carbon::parse($date);
+    }
+    public function setTaskEndAttribute($date)
+    {
+        $this->attributes['task_end'] = Carbon::parse($date);
+    }
+    public function setTaskWorktimeAttribute($date)
+    {
+        $this->attributes['task_worktime'] = Carbon::createFromFormat('H ч. i мин.', $date);
     }
 }

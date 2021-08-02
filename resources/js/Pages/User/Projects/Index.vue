@@ -10,55 +10,43 @@
         </search-filter>
         <inertia-link
             class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
-            :href="route('user.tasks.create')">Добавить задачу
+            :href="route('user.projects.create')">Добавить проект
         </inertia-link>
         <table class="w-full whitespace-nowrap">
             <tr class="text-left font-bold">
                 <th class="px-6 pt-6 pb-4">Id</th>
                 <th class="px-6 pt-6 pb-4">Проект</th>
                 <th class="px-6 pt-6 pb-4">Создано</th>
-                <th class="px-6 pt-6 pb-4">Начато</th>
-                <th class="px-6 pt-6 pb-4">Проработано</th>
             </tr>
-            <tr v-for="task in tasks.data" :key="task.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+            <tr v-for="project in projects.data" :key="project.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                 <td class="border-t">
                     <inertia-link class="px-6 py-4 flex items-center focus:text-indigo-500"
-                                  :href="route('user.tasks.edit', task.id)">
-                        {{ task.id }}
-                        <icon v-if="task.deleted_at" name="trash" class="flex-shrink-0 w-3 h-3 fill-gray-400 ml-2"/>
+                                  :href="route('user.projects.edit', project.id)">
+                        {{ project.id }}
+                        <icon v-if="project.deleted_at" name="trash" class="flex-shrink-0 w-3 h-3 fill-gray-400 ml-2"/>
                     </inertia-link>
                 </td>
                 <td class="border-t">
-                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
-                        {{ task.project }}
+                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.projects.tasks', project.id)" tabindex="-1">
+                        {{ project.name }}
                     </inertia-link>
                 </td>
                 <td class="border-t">
-                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
-                        {{ task.created_at }}
-                    </inertia-link>
-                </td>
-                <td class="border-t">
-                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
-                        {{ task.task_start }}
-                    </inertia-link>
-                </td>
-                <td class="border-t">
-                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
-                        {{ task.task_worktime }}
+                    <inertia-link class="px-6 py-4 flex items-center" :href="route('user.projects.tasks', project.id)" tabindex="-1">
+                        {{ project.created_at }}
                     </inertia-link>
                 </td>
                 <td class="border-t w-px">
-                    <inertia-link class="px-4 flex items-center" :href="route('user.tasks.edit', task.id)" tabindex="-1">
+                    <inertia-link class="px-4 flex items-center" :href="route('user.projects.tasks', project.id)" tabindex="-1">
                         <icon name="cheveron-right" class="block w-6 h-6 fill-gray-400"/>
                     </inertia-link>
                 </td>
             </tr>
-            <tr v-if="tasks.data.length === 0">
-                <td class="border-t px-6 py-4" colspan="4">No tasks found.</td>
+            <tr v-if="projects.data.length === 0">
+                <td class="border-t px-6 py-4" colspan="4">No projects found.</td>
             </tr>
         </table>
-        <pagination-ping class="mt-6" :links="tasks.links"/>
+        <pagination-ping class="mt-6" :links="projects.links"/>
 
 
     </breeze-authenticated-layout>
@@ -86,13 +74,13 @@ export default {
     },
     props: {
         filters: Object,
-        tasks: Object,
+        projects: Object,
     },
     watch: {
         form: {
             deep: true,
             handler: throttle(function () {
-                this.$inertia.get(this.route('user.tasks'), pickBy(this.form), {preserveState: true})
+                this.$inertia.get(this.route('user.projects'), pickBy(this.form), {preserveState: true})
             }, 150),
         },
     },
@@ -108,15 +96,6 @@ export default {
         console.log(this.$page);
     },
     methods: {
-        getTasks() {
-            axios.get('/user/get-tasks')
-                .then(response => {
-
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
         reset() {
             this.form = mapValues(this.form, () => null)
         },

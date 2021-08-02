@@ -7,7 +7,7 @@
             </h1>
             <div class="bg-white rounded-md shadow overflow-hidden">
                 <trashed-message v-if="task.deleted_at" class="mb-6" @restore="restore">
-                  This task has been deleted.
+                    This task has been deleted.
                 </trashed-message>
                 <form @submit.prevent="update">
                     <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
@@ -32,7 +32,7 @@
                         <text-input :id="'in4'" v-model="form.task_description" :error="form.errors.task_description" label="Task Desc"/>
                         <text-input :id="'in5'" v-model="form.task_worktime" :error="form.errors.task_worktime" label="Worktime"/>
                     </div>
-                    <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-end items-center">
+                    <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
                         <button v-if="!task.deleted_at" class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Удалить
                             задачу
                         </button>
@@ -89,19 +89,19 @@ export default {
         }
     },
     methods: {
-    update() {
-      this.form.put(this.route('user.tasks.update', this.task.id))
-    },
-    destroy() {
-      if (confirm('Are you sure you want to delete this organization?')) {
-        this.$inertia.delete(this.route('user.tasks.destroy', this.task.id))
-      }
-    },
-    restore() {
-      if (confirm('Are you sure you want to restore this organization?')) {
-        this.$inertia.put(this.route('user.tasks.restore', this.task.id))
-      }
-    },
+        update() {
+            this.form.put(this.route('user.tasks.update', this.task.id))
+        },
+        destroy() {
+            if (confirm('Are you sure you want to delete this organization?')) {
+                this.$inertia.delete(this.route('user.tasks.destroy', this.task.id))
+            }
+        },
+        restore() {
+            if (confirm('Are you sure you want to restore this organization?')) {
+                this.$inertia.put(this.route('user.tasks.restore', this.task.id))
+            }
+        },
     }
 }
 </script>

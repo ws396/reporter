@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -22,7 +21,7 @@ class TaskController extends Controller
             ->through(function ($task) {
                 return [
                     'id' => $task->id,
-                    'project' => $task->project,
+                    //'project' => $task->project,
                     'task_start' => $task->task_start,
                     'task_worktime' => $task->task_worktime,
                     'created_at' => $task->created_at,
@@ -45,15 +44,15 @@ class TaskController extends Controller
     {
         $task = new Task;
 
-        $task->user_id = Auth::id();
-        $task->team_id = 0;
-        $task->task_start = Carbon::parse($request->task_start);
-        $task->task_end = Carbon::parse($request->task_end);
-        $task->project = $request->project;
+        $task->task_start = $request->task_start;
+        $task->task_end = $request->task_end;
+        $task->project_id = $request->project_id;
         $task->task_description = $request->task_description;
-        $task->task_worktime = Carbon::parse($request->task_worktime);
+        $task->task_worktime = $request->task_worktime;
 
         $task->save();
+
+        $task->users()->attach(Auth::id(), ['is_taskgiver' => true]);
 
         return Redirect::route('user.tasks')->with('success', 'Task created.');
     }
@@ -76,13 +75,12 @@ class TaskController extends Controller
 
     public function update(Task $task, \Illuminate\Http\Request $request)
     {
-        $task->user_id = Auth::id();
-        $task->team_id = 0;
-        $task->task_start = Carbon::parse($request->task_start);
-        $task->task_end = Carbon::parse($request->task_end);
-        $task->project = $request->project;
+        $task->lasteditor_id = Auth::id();
+        $task->task_start = $request->task_start;
+        $task->task_end = $request->task_end;
+        //$task->project_id = $request->project_id;
         $task->task_description = $request->task_description;
-        $task->task_worktime = Carbon::parse($request->task_worktime);
+        $task->task_worktime = $request->task_worktime;
 
         $task->save();
 
