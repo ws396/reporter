@@ -22,6 +22,8 @@ class ProjectController extends Controller
                 return [
                     'id' => $project->id,
                     'name' => $project->name,
+                    'created_at' => $project->created_at,
+                    'deleted_at' => $project->deleted_at,
                 ];
             });
 

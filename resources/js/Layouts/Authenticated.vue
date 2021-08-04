@@ -18,6 +18,9 @@
                                 <breeze-nav-link :href="route('user.projects')" :active="route().current('user.projects')">
                                     Список проектов
                                 </breeze-nav-link>
+                                <breeze-nav-link :href="route('admin.control-panel')" :active="route().current('admin.control-panel')">
+                                    Пользователи
+                                </breeze-nav-link>
                             </div>
                         </div>
 
@@ -71,6 +74,9 @@
                         <breeze-responsive-nav-link :href="route('user.projects')" :active="route().current('user.projects')">
                             Список проектов
                         </breeze-responsive-nav-link>
+                        <breeze-responsive-nav-link :href="route('admin.control-panel')" :active="route().current('admin.control-panel')">
+                            Пользователи
+                        </breeze-responsive-nav-link>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -96,7 +102,7 @@
                 </div>
             </header>
 
-            <flash-messages />
+            <flash-messages/>
 
 
             <!-- Page Content -->

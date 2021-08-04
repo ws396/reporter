@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model
+class Project extends BaseModel
 {
     protected $guarded = [
         '_method',
@@ -25,6 +25,11 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')
             ->withPivot(['is_lead']);
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where($field ?? 'id', $value)->withTrashed()->firstOrFail();
     }
 
     public function scopeFilter($query, array $filters)

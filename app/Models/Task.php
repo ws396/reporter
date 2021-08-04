@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Task extends Model
+class Task extends BaseModel
 {
     protected $guarded = [
         '_method',
@@ -19,14 +19,22 @@ class Task extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'tasks_users', 'task_id', 'user_id')
+        return $this->belongsToMany(User::class, 'tasks_users', 'task_id', 'user_id');
             //->withTimestamps()
-            ->withPivot(['is_taskgiver']);
+            //->withPivot(['is_taskgiver']);
     }
 
     public function projects()
     {
         return $this->hasOne(Project::class);
+    }
+
+    public function taskgivers()
+    {
+        return $this->belongsToMany(User::class, 'tasks_users', 'task_id', 'user_id')
+            //->withTimestamps()
+            ->withPivot(['is_taskgiver'])
+            ->wherePivot('is_taskgiver', 1);
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -45,31 +53,5 @@ class Task extends Model
                 $query->onlyTrashed();
             }
         });
-    }
-
-    public function getCreatedAtAttribute($date)
-    {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d-m-Y H:i:s');
-    }
-    public function getUpdatedAtAttribute($date)
-    {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d-m-Y H:i:s');
-    }
-    public function getTaskWorktimeAttribute($date)
-    {
-        return Carbon::createFromFormat('H:i:s', $date)->format('H ч. i мин.');
-    }
-
-    public function setTaskStartAttribute($date)
-    {
-        $this->attributes['task_start'] = Carbon::parse($date);
-    }
-    public function setTaskEndAttribute($date)
-    {
-        $this->attributes['task_end'] = Carbon::parse($date);
-    }
-    public function setTaskWorktimeAttribute($date)
-    {
-        $this->attributes['task_worktime'] = Carbon::createFromFormat('H ч. i мин.', $date);
     }
 }

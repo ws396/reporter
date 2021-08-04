@@ -16,7 +16,7 @@ export default {
             type: String,
         },
         //value: [String, Number, Boolean],
-        modelValue: String,
+        modelValue: [String, Number, Boolean],
         label: String,
         error: String,
     },

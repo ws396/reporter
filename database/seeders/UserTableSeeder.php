@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -21,6 +22,7 @@ class UserTableSeeder extends Seeder
                 'name'      => 'ws396',
                 'email'     => 'ws@sentro.ru',
                 'password'  => Hash::make('s93jf7wjd'),
+                'role' => User::IS_ADMIN
             ],
         ];
 

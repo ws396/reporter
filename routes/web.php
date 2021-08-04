@@ -40,7 +40,13 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'admin.'
     ], function () {
 
-        Route::get('tasklist', [User\TaskController::class, 'index'])->name('tasklist');
+        Route::get('control-panel', [Admin\UserController::class, 'index'])->name('control-panel');
+        Route::get('control-panel/create', [Admin\UserController::class, 'create'])->name('control-panel.create');
+        Route::post('control-panel', [Admin\UserController::class, 'store'])->name('control-panel.store');
+        Route::get('control-panel/{user}/edit', [Admin\UserController::class, 'edit'])->name('control-panel.edit');
+        Route::put('control-panel/{user}', [Admin\UserController::class, 'update'])->name('control-panel.update');
+        Route::delete('control-panel/{user}', [Admin\UserController::class, 'destroy'])->name('control-panel.destroy');
+        Route::put('control-panel/{user}/restore', [Admin\UserController::class, 'restore'])->name('control-panel.restore');
 
     });
 

@@ -23,7 +23,7 @@ class CreateTasksTable extends Migration
             $table->dateTime('task_start');
             $table->dateTime('task_end');
             $table->string('task_worktime');
-            $table->integer('task_status')->default(0);
+            $table->integer('task_status');
             $table->mediumText('task_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
