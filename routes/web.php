@@ -64,6 +64,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('projects/{project}', [User\ProjectController::class, 'destroy'])->name('projects.destroy');
         Route::put('projects/{project}/restore', [User\ProjectController::class, 'restore'])->name('projects.restore');
 
+        Route::get('projects/{project}/invite', [User\ProjectController::class, 'inviteToProject'])->name('projects.invite');
+        Route::post('projects/{project}/invite-store', [User\ProjectController::class, 'inviteStore'])->name('projects.invite-store');
+
         Route::group([
             'prefix' => 'projects/{project}',
             'as' => 'projects.'
@@ -75,6 +78,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::put('tasks/{task}', [User\TaskController::class, 'update'])->name('tasks.update');
             Route::delete('tasks/{task}', [User\TaskController::class, 'destroy'])->name('tasks.destroy');
             Route::put('tasks/{task}/restore', [User\TaskController::class, 'restore'])->name('tasks.restore');
+
+            Route::get('tasks/{task}/invite', [User\TaskController::class, 'inviteToTask'])->name('tasks.invite');
+            Route::post('tasks/{task}/invite-store', [User\TaskController::class, 'inviteStore'])->name('tasks.invite-store');
         });
 
     });

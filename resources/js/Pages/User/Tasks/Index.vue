@@ -6,6 +6,18 @@
             </inertia-link>
             <span class="text-indigo-400 font-medium"> /</span> Задачи {{ project.name }}
         </h1>
+        <div class="w-full mb-4">
+            <div>
+                <h1>Участники проекта:</h1>
+                <div v-for="user in users" :key="user.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+                    {{ user.name }}
+                </div>
+                <inertia-link
+                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
+                    :href="route('user.projects.invite', project.id)">Добавить участника
+                </inertia-link>
+            </div>
+        </div>
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
             <label class="block text-gray-700">Trashed:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -91,7 +103,8 @@ export default {
     props: {
         filters: Object,
         tasks: Object,
-        project: Object
+        project: Object,
+        users: Object,
     },
     watch: {
         form: {

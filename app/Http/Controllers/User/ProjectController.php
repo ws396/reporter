@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -82,5 +83,42 @@ class ProjectController extends Controller
         $project->restore();
 
         return Redirect::back()->with('success', 'Project restored.');
+    }
+
+    public function inviteToProject(Project $project)
+    {
+        $users = User::whereNotIn('id', function ($query) use ($project) {
+                $query->select('user_id')
+                    ->from('projects_users')
+                    ->where('project_id', $project->id);
+            })
+            ->orderBy('created_at')
+            ->filter(Request::only('search', 'trashed'))
+            ->paginate(10)
+            ->withQueryString()
+            ->through(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'created_at' => $user->created_at,
+                    'deleted_at' => $user->deleted_at,
+                    'role' => $user->role,
+                ];
+            });
+
+        return Inertia::render('Admin/Invite/ToProject', [
+            'filters' => Request::all('search', 'trashed'),
+            'users' => $users,
+            'project' => $project
+        ]);
+    }
+
+    public function inviteStore(Project $project, \Illuminate\Http\Request $request)
+    {
+        foreach ($request->picked_users as $userId) {
+            $project->users()->attach($userId);
+        }
+
+        return Redirect::back()->with('success', 'Пользователи добавлены к проекту');
     }
 }

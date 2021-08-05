@@ -51,13 +51,15 @@ class UserController extends Controller
             'role' => 'integer'
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'remember_token' => Str::random(60),
-        ]);
+        $user = new User;
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role = $request->role;
+        $user->remember_token = Str::random(60);
+
+        $user->save();
 
         event(new Registered($user));
 

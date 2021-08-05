@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -33,8 +34,9 @@ class TaskController extends Controller
         return Inertia::render('User/Tasks/Index', [
             'filters' => Request::all('search', 'trashed'),
             'tasks' => $tasks,
+            'users' => $project->users()->get(),
             'project' => $project
-        ]);
+        ]); // Надо бы оптимизировать это и аналоги для фильтра. Можно писать отдельные методы для контента фильтра. Других вариантов и не вижу.
     }
 
     public function create(Project $project)
@@ -72,10 +74,14 @@ class TaskController extends Controller
                 'task_end' => $task->task_end,
                 'task_description' => $task->task_description,
                 'task_worktime' => $task->task_worktime,
+                'task_status' => $task->task_status,
                 'created_at' => $task->created_at,
                 'deleted_at' => $task->deleted_at,
+                'updated_at' => $task->updated_at,
+                'last_editor' => $task->lasteditor_id ? User::find($task->lasteditor_id)->name : null,
             ],
             'taskgiver' => $task->taskgivers()->first(),
+            'users' => $task->users()->get(),
             'project' => $project
         ]);
     }
@@ -107,5 +113,48 @@ class TaskController extends Controller
         $task->restore();
 
         return Redirect::back()->with('success', 'Task restored.');
+    }
+
+    public function inviteToTask(Project $project, Task $task)
+    {
+        $users = User::whereNotIn('id', function ($query) use ($task) {
+                $query->select('user_id')
+                    ->from('tasks_users')
+                    ->where('task_id', $task->id);
+            })
+            ->whereIn('id', function ($query) use ($project) {
+                $query->select('user_id')
+                    ->from('projects_users')
+                    ->where('project_id', $project->id);
+            })
+            ->orderBy('created_at')
+            ->filter(Request::only('search', 'trashed'))
+            ->paginate(10)
+            ->withQueryString()
+            ->through(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'created_at' => $user->created_at,
+                    'deleted_at' => $user->deleted_at,
+                    'role' => $user->role,
+                ];
+            });
+
+        return Inertia::render('Admin/Invite/ToTask', [
+            'filters' => Request::all('search', 'trashed'),
+            'users' => $users,
+            'project' => $project,
+            'task' => $task,
+        ]);
+    }
+
+    public function inviteStore(Project $project, Task $task, \Illuminate\Http\Request $request)
+    {
+        foreach ($request->picked_users as $userId) {
+            $task->users()->attach($userId);
+        }
+
+        return Redirect::back()->with('success', 'Пользователи добавлены к задаче');
     }
 }

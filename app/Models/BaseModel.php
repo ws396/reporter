@@ -11,6 +11,10 @@ class BaseModel extends Model
     {
         return Carbon::parse($date)->format('d-m-Y H:i:s');
     }
+    public function getDeletedAtAttribute($date)
+    {
+        return $date !== null ? Carbon::parse($date)->format('d-m-Y H:i:s') : $date;
+    }
     public function getUpdatedAtAttribute($date)
     {
         return Carbon::parse($date)->format('d-m-Y H:i:s');
