@@ -53,7 +53,7 @@ class ProjectController extends Controller
 
         $project->users()->attach(Auth::id(), ['is_lead' => true]);
 
-        return Redirect::route('user.projects')->with('success', 'Project created.');
+        return Redirect::route('user.projects')->with('success', 'Проект ' . $project->name . ' создан.');
     }
 
     public function edit(Project $project)
@@ -62,6 +62,8 @@ class ProjectController extends Controller
             'project' => [
                 'id' => $project->id,
                 'name' => $project->name,
+                'updated_at' => $project->deleted_at,
+                'deleted_at' => $project->deleted_at,
             ],
         ]);
     }
@@ -72,21 +74,21 @@ class ProjectController extends Controller
 
         $project->save();
 
-        return Redirect::back()->with('success', 'Project updated.');
+        return Redirect::back()->with('success', 'Проект ' . $project->name . ' обновлён.');
     }
 
     public function destroy(Project $project)
     {
         $project->delete();
 
-        return Redirect::back()->with('success', 'Project deleted.');
+        return Redirect::back()->with('success', 'Проект ' . $project->name . ' удалён.');
     }
 
     public function restore(Project $project)
     {
         $project->restore();
 
-        return Redirect::back()->with('success', 'Project restored.');
+        return Redirect::back()->with('success', 'Проект ' . $project->name . ' восстановлен.');
     }
 
     public function inviteToProject(Project $project)
@@ -123,6 +125,6 @@ class ProjectController extends Controller
             $project->users()->attach($userId);
         }
 
-        return Redirect::back()->with('success', 'Пользователи добавлены к проекту');
+        return Redirect::back()->with('success', 'Пользователи добавлены к проекту ' . $project->name);
     }
 }

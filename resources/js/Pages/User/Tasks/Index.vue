@@ -37,6 +37,7 @@
                 <th class="px-6 pt-6 pb-4">Создано</th>
                 <th class="px-6 pt-6 pb-4">Начато</th>
                 <th class="px-6 pt-6 pb-4">Проработано</th>
+                <th class="px-6 pt-6 pb-4">Статус</th>
             </tr>
             <tr v-for="task in tasks.data" :key="task.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                 <td class="border-t">
@@ -62,6 +63,12 @@
                     <inertia-link class="px-6 py-4 flex items-center"
                                   :href="route('user.projects.tasks.edit', [project.id, task.id])" tabindex="-1">
                         {{ task.task_worktime }}
+                    </inertia-link>
+                </td>
+                 <td class="border-t">
+                    <inertia-link class="px-6 py-4 flex items-center"
+                                  :href="route('user.projects.tasks.edit', [project.id, task.id])" tabindex="-1">
+                        {{ statusFrontend[task.task_status] }}
                     </inertia-link>
                 </td>
                 <td class="border-t w-px">
@@ -121,7 +128,12 @@ export default {
             form: {
                 search: this.filters.search,
                 trashed: this.filters.trashed,
-            }
+            },
+            statusFrontend: {
+                0: "Поставлена",
+                1: "Начата",
+                2: "Выполнена",
+            } // При необходимости можно перенести например в лэйаут
         }
     },
     methods: {

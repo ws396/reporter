@@ -26,6 +26,7 @@ class TaskController extends Controller
                     //'project' => $task->project,
                     'task_start' => $task->task_start,
                     'task_worktime' => $task->task_worktime,
+                    'task_status' => $task->task_status,
                     'created_at' => $task->created_at,
                     'deleted_at' => $task->deleted_at,
                 ];
@@ -65,7 +66,7 @@ class TaskController extends Controller
 
         $task->users()->attach(Auth::id(), ['is_taskgiver' => true]);
 
-        return Redirect::route('user.projects.tasks', $project->id)->with('success', 'Task created.');
+        return Redirect::route('user.projects.tasks', $project->id)->with('success', 'Задача #' . $task->id . ' создана.');
     }
 
     public function edit(Project $project, Task $task)
@@ -104,21 +105,21 @@ class TaskController extends Controller
 
         $task->save();
 
-        return Redirect::back()->with('success', 'Task updated.');
+        return Redirect::back()->with('success', 'Задача #' . $task->id . ' обновлена.');
     }
 
     public function destroy(Project $project, Task $task)
     {
         $task->delete();
 
-        return Redirect::back()->with('success', 'Task deleted.');
+        return Redirect::back()->with('success', 'Задача #' . $task->id . ' удалена.');
     }
 
     public function restore(Project $project, Task $task)
     {
         $task->restore();
 
-        return Redirect::back()->with('success', 'Task restored.');
+        return Redirect::back()->with('success', 'Задача #' . $task->id . ' восстановлена.');
     }
 
     public function inviteToTask(Project $project, Task $task)
@@ -161,6 +162,6 @@ class TaskController extends Controller
             $task->users()->attach($userId);
         }
 
-        return Redirect::back()->with('success', 'Пользователи добавлены к задаче');
+        return Redirect::back()->with('success', 'Пользователи добавлены к задаче #' . $task->id);
     }
 }

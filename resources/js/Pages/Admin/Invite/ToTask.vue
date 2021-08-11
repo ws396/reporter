@@ -23,7 +23,7 @@
                 <th class="px-6 pt-6 pb-4">Id</th>
                 <th class="px-6 pt-6 pb-4">Имя</th>
                 <th class="px-6 pt-6 pb-4">Создан</th>
-                <th class="px-6 pt-6 pb-4">Уровень доступа</th>
+                <th class="px-6 pt-6 pb-4">Добавить</th>
             </tr>
             <tr v-for="user in users.data" :key="user.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                 <td class="border-t">
@@ -43,7 +43,7 @@
                     </div>
                 </td>
                 <td class="border-t w-px">
-                    <div class="px-4 flex items-center">
+                    <div class="px-6 flex items-center">
                         <input type="checkbox" :value="user.id" v-model="this.formInvite.picked_users"
                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
 
