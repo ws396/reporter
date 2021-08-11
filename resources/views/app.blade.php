@@ -18,11 +18,13 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
 
+    {{--
     @auth
     <script>
         window.userRole = {{ Auth::user()->role }}
     </script>
     @endauth
+    --}}
 
     <body class="font-sans antialiased">
         @inertia
