@@ -34,6 +34,10 @@ class UserController extends Controller
         return Inertia::render('Admin/ControlPanel/Index', [
             'users' => $users,
             'filters' => Request::all('search', 'trashed'),
+            'can' => [
+                'create_user' => Auth::user()->can('admin_actions'),
+                'edit_user' => Auth::user()->can('admin_actions'),
+            ],
         ]);
     }
 
@@ -82,7 +86,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => ['confirmed', Rules\Password::defaults()],
             'role' => 'integer'
         ]);

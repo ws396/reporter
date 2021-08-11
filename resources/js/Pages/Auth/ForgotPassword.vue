@@ -1,6 +1,6 @@
 <template>
     <div class="mb-4 text-sm text-gray-600">
-        Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
+        Забыли пароль? Не проблема. Просто сообщите свой Email адрес и мы отправим вам ссылку на сброс пароля, которая позволит вам поставить новый.
     </div>
 
     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -17,7 +17,7 @@
 
         <div class="flex items-center justify-end mt-4">
             <breeze-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Email Password Reset Link
+                Отправить
             </breeze-button>
         </div>
     </form>

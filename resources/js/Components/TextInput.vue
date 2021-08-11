@@ -3,12 +3,14 @@
         <label v-if="label" class="block" :for="id">{{ label }}:</label>
         <input :id="id" ref="input" v-bind="$attrs" class="form-input w-full" :class="{ error: error }" :type="type" :value="modelValue"
                :placeholder="placeholder" @input="$emit('update:modelValue', $event.target.value)"/>
-        <div v-if="error" class="form-error">{{ error }}</div>
+        <input-error v-if="error">{{ error }}</input-error>
     </div>
 </template>
 
 <script>
+import InputError from "@/Components/InputError";
 export default {
+    components: {InputError},
     inheritAttrs: false,
     props: {
         id: {

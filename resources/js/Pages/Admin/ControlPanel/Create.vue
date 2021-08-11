@@ -7,7 +7,7 @@
                 </inertia-link>
                 <span class="text-indigo-400 font-medium"> /</span> Создать
             </h1>
-            <div class="bg-white rounded-md shadow overflow-hidden">
+            <div class="bg-white rounded-md shadow overflow-hidden p-4">
                 <breeze-validation-errors class="mb-4"/>
 
                 <form @submit.prevent="submit">

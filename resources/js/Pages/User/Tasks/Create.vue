@@ -15,12 +15,12 @@
                             <label class="block">Начало задачи:</label>
                             <flat-pickr v-model="form.task_start" :config="fpconfig"
                                         :class="[{ error: form.errors.task_start }, 'w-full']"></flat-pickr>
-                            <div v-if="form.errors.task_start" class="form-error">{{ form.errors.task_start }}</div>
+                            <input-error v-if="form.errors.task_start">{{ form.errors.task_start }}</input-error>
                         </div>
                         <div class="pr-6 pb-8 w-full lg:w-1/2">
                             <label class="block">Конец задачи:</label>
                             <flat-pickr v-model="form.task_end" :config="fpconfig" :class="[{ error: form.errors.task_end }, 'w-full']"></flat-pickr>
-                            <div v-if="form.errors.task_end" class="form-error">{{ form.errors.task_end }}</div>
+                            <input-error v-if="form.errors.task_end">{{ form.errors.task_end }}</input-error>
                         </div>
 
 
@@ -57,11 +57,13 @@ import {maska} from 'maska'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
+import InputError from "@/Components/InputError";
 
 
 export default {
     directives: {maska},
     components: {
+        InputError,
         BreezeAuthenticatedLayout,
         LoadingButton,
         SelectInput,

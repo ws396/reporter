@@ -8,7 +8,7 @@
             <div class="bg-white rounded-md shadow overflow-hidden">
                 <form @submit.prevent="store">
                     <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
-                        <text-input :id="'in1'" v-model="form.name" :error="form.errors.name" label="Project name"/>
+                        <text-input :id="'in1'" v-model="form.name" :error="form.errors.name" label="Название проекта"/>
                     </div>
                     <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-end items-center">
                         <loading-button :loading="form.processing" class="btn-indigo" type="submit">Создать проект</loading-button>

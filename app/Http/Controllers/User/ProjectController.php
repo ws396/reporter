@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ class ProjectController extends Controller
         return Inertia::render('User/Projects/Create');
     }
 
-    public function store(\Illuminate\Http\Request $request)
+    public function store(ProjectRequest $request)
     {
         $project = new Project;
 
@@ -68,7 +69,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function update(Project $project, \Illuminate\Http\Request $request)
+    public function update(Project $project, ProjectRequest $request)
     {
         $project->name = $request->name;
 
