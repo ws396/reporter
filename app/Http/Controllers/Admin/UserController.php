@@ -34,6 +34,10 @@ class UserController extends Controller
         return Inertia::render('Admin/ControlPanel/Index', [
             'users' => $users,
             'filters' => Request::all('search', 'trashed'),
+            'can' => [
+                'create_project' => Auth::user()->can('admin_actions'),
+                'edit_project' => Auth::user()->can('admin_actions'),
+            ],
         ]);
     }
 

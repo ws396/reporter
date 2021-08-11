@@ -19,7 +19,7 @@
     </div>
 
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" v-if="($page.props.flash.error || Object.keys($page.props.errors).length > 0) && show">
-        <div class="mb-8 flex items-center justify-between bg-red-400 rounded max-w-3xl">
+        <div class="flex items-center justify-between bg-red-400 rounded w-full">
             <div class="flex items-center">
                 <svg class="ml-4 mr-2 flex-shrink-0 w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path
@@ -27,8 +27,8 @@
                 </svg>
                 <div v-if="$page.props.flash.error" class="py-4 text-white text-sm font-medium">{{ $page.props.flash.error }}</div>
                 <div v-else class="py-4 text-white text-sm font-medium">
-                    <span v-if="Object.keys($page.props.errors).length === 1">There is one form error.</span>
-                    <span v-else>There are {{ Object.keys($page.props.errors).length }} form errors.</span>
+                    <span v-if="Object.keys($page.props.errors).length === 1">В форме одна ошибка.</span>
+                    <span v-else>В форме имеются ошибки ({{ Object.keys($page.props.errors).length }}).</span>
                 </div>
             </div>
             <button type="button" class="group mr-2 p-2" @click="show = false">

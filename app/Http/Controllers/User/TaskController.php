@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskRequest;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -51,7 +52,7 @@ class TaskController extends Controller
         ]);
     }
 
-    public function store(Project $project, \Illuminate\Http\Request $request)
+    public function store(Project $project, TaskRequest $request)
     {
         $task = new Task;
 
@@ -94,7 +95,7 @@ class TaskController extends Controller
         ]);
     }
 
-    public function update(Project $project, Task $task, \Illuminate\Http\Request $request)
+    public function update(Project $project, Task $task, TaskRequest $request)
     {
         $task->lasteditor_id = Auth::id();
         $task->task_start = $request->task_start;

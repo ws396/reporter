@@ -4,12 +4,14 @@
         <select :id="id" ref="input" v-model="selected" :value="modelValue" v-bind="$attrs" class="form-select w-full" :class="{ error: error }">
             <slot/>
         </select>
-        <div v-if="error" class="form-error">{{ error }}</div>
+        <input-error v-if="error">{{ error }}</input-error>
     </div>
 </template>
 
 <script>
+import InputError from "@/Components/InputError";
 export default {
+    components: {InputError},
     inheritAttrs: false,
     props: {
         id: {
