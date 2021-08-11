@@ -22,6 +22,7 @@
                 <th class="px-6 pt-6 pb-4">Создан</th>
                 <th class="px-6 pt-6 pb-4">Уровень доступа</th>
             </tr>
+
             <tr v-for="user in users.data" :key="user.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                 <td class="border-t">
                     <inertia-link class="px-6 py-4 flex items-center focus:text-indigo-500"
