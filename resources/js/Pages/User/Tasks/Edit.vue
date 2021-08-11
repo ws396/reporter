@@ -14,6 +14,7 @@
                         {{ user.name }}
                     </div>
                     <inertia-link
+                        v-if="can.invite_to_task"
                         class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
                         :href="route('user.projects.tasks.invite', [project.id, task.id])">Добавить участника
                     </inertia-link>
@@ -34,27 +35,27 @@
                             </div>
                         </div>
                         <div class="pr-6 pb-8 w-full lg:w-1/2">
-                            <label class="block">Task Start:</label>
+                            <label class="block">Начало задачи:</label>
                             <flat-pickr v-model="form.task_start" :config="fpconfig"
                                         :class="[{ error: form.errors.task_start }, 'w-full']"></flat-pickr>
                             <div v-if="form.errors.task_start" class="form-error">{{ form.errors.task_start }}</div>
                         </div>
                         <div class="pr-6 pb-8 w-full lg:w-1/2">
-                            <label class="block">Task End:</label>
+                            <label class="block">Конец задачи:</label>
                             <flat-pickr v-model="form.task_end" :config="fpconfig" :class="[{ error: form.errors.task_end }, 'w-full']"></flat-pickr>
                             <div v-if="form.errors.task_end" class="form-error">{{ form.errors.task_end }}</div>
                         </div>
 
-                        <text-input :id="'in3'" v-model="form.task_worktime" :error="form.errors.task_worktime" label="Worktime"
+                        <text-input :id="'in3'" v-model="form.task_worktime" :error="form.errors.task_worktime" label="Время работы"
                                     placeholder="-- ч. -- мин."
                                     v-maska="{ mask: '#* ч. @# мин.', tokens: { '@': { pattern: /[0-5]/ }} }"/>
                         <select-input v-model="form.task_status" :error="form.errors.task_status" class="pr-6 w-full lg:w-1/2"
-                                      label="Task Status">
+                                      label="Статус задачи">
                             <option :value="0">Поставлена</option>
                             <option :value="1">Начата</option>
                             <option :value="2">Выполнена</option>
                         </select-input>
-                        <text-area :id="'in4'" v-model="form.task_description" :error="form.errors.task_description" label="Task Desc"/>
+                        <text-area :id="'in4'" v-model="form.task_description" :error="form.errors.task_description" label="Описание задачи"/>
 
                     </div>
                     <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
@@ -102,6 +103,7 @@ export default {
         taskgiver: Object,
         project: Object,
         users: Object,
+        can: Object,
     },
     data() {
         return {
@@ -125,12 +127,12 @@ export default {
             this.form.put(this.route('user.projects.tasks.update', [this.project.id, this.task.id]))
         },
         destroy() {
-            if (confirm('Are you sure you want to delete this organization?')) {
+            if (confirm('Вы точно хотите удалить эту задачу?')) {
                 this.$inertia.delete(this.route('user.projects.tasks.destroy', [this.project.id, this.task.id]))
             }
         },
         restore() {
-            if (confirm('Are you sure you want to restore this organization?')) {
+            if (confirm('Вы точно хотите восстановить эту задачу?')) {
                 this.$inertia.put(this.route('user.projects.tasks.restore', [this.project.id, this.task.id]))
             }
         },

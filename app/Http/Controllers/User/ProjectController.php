@@ -31,6 +31,10 @@ class ProjectController extends Controller
         return Inertia::render('User/Projects/Index', [
             'filters' => Request::all('search', 'trashed'),
             'projects' => $projects,
+            'can' => [
+                'create_project' => Auth::user()->can('lead_actions'),
+                'edit_project' => Auth::user()->can('lead_actions'),
+            ],
         ]);
     }
 

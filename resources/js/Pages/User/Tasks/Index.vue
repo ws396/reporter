@@ -13,17 +13,18 @@
                     {{ user.name }}
                 </div>
                 <inertia-link
+                    v-if="can.invite_to_project"
                     class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
-                    :href="route('user.projects.invite', project.id)">Добавить участника
+                    :href="route('admin.projects.invite', project.id)">Добавить участника
                 </inertia-link>
             </div>
         </div>
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
-            <label class="block text-gray-700">Trashed:</label>
+            <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
                 <option :value="null"/>
-                <option value="with">With Trashed</option>
-                <option value="only">Only Trashed</option>
+                <option value="with">С удалёнными</option>
+                <option value="only">Только удалённые</option>
             </select>
         </search-filter>
         <inertia-link
@@ -71,7 +72,7 @@
                 </td>
             </tr>
             <tr v-if="tasks.data.length === 0">
-                <td class="border-t px-6 py-4" colspan="4">No tasks found.</td>
+                <td class="border-t px-6 py-4" colspan="4">Задачи не найдены.</td>
             </tr>
         </table>
         <pagination-ping class="mt-6" :links="tasks.links"/>
@@ -105,6 +106,7 @@ export default {
         tasks: Object,
         project: Object,
         users: Object,
+        can: Object,
     },
     watch: {
         form: {
@@ -122,19 +124,7 @@ export default {
             }
         }
     },
-    created() {
-        console.log(this.$page);
-    },
     methods: {
-        getTasks() {
-            axios.get('/user/get-tasks')
-                .then(response => {
-
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
         reset() {
             this.form = mapValues(this.form, () => null)
         },

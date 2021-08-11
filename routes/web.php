@@ -34,13 +34,14 @@ Route::group(['middleware' => 'auth'], function () {
         return Inertia::render('Index');
     })->name('index');
 
+    Route::get('/export/{user?}', [User\ExportController::class, 'index'])->name('export');
+    Route::get('/export-launch/{user}', [User\ExportController::class, 'export'])->name('export.launch');
+
     Route::group([
-        'prefix' => 'admin',
         'middleware' => 'is_admin',
         'as' => 'admin.'
     ], function () {
 
-        Route::get('control-panel', [Admin\UserController::class, 'index'])->name('control-panel');
         Route::get('control-panel/create', [Admin\UserController::class, 'create'])->name('control-panel.create');
         Route::post('control-panel', [Admin\UserController::class, 'store'])->name('control-panel.store');
         Route::get('control-panel/{user}/edit', [Admin\UserController::class, 'edit'])->name('control-panel.edit');
@@ -50,13 +51,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
-
     Route::group([
-        'prefix' => 'user',
-        'as' => 'user.'
+        'middleware' => 'is_lead',
+        'as' => 'admin.'
     ], function () {
 
-        Route::get('projects', [User\ProjectController::class, 'index'])->name('projects');
+        Route::get('control-panel', [Admin\UserController::class, 'index'])->name('control-panel');
+
         Route::get('projects/create', [User\ProjectController::class, 'create'])->name('projects.create');
         Route::post('projects', [User\ProjectController::class, 'store'])->name('projects.store');
         Route::get('projects/{project}/edit', [User\ProjectController::class, 'edit'])->name('projects.edit');
@@ -71,6 +72,22 @@ Route::group(['middleware' => 'auth'], function () {
             'prefix' => 'projects/{project}',
             'as' => 'projects.'
         ], function () {
+            Route::get('tasks/{task}/invite', [User\TaskController::class, 'inviteToTask'])->name('tasks.invite');
+            Route::post('tasks/{task}/invite-store', [User\TaskController::class, 'inviteStore'])->name('tasks.invite-store');
+        });
+
+    });
+
+    Route::group([
+        'as' => 'user.'
+    ], function () {
+
+        Route::get('projects', [User\ProjectController::class, 'index'])->name('projects');
+
+        Route::group([
+            'prefix' => 'projects/{project}',
+            'as' => 'projects.'
+        ], function () {
             Route::get('tasks', [User\TaskController::class, 'index'])->name('tasks');
             Route::get('tasks/create', [User\TaskController::class, 'create'])->name('tasks.create');
             Route::post('tasks', [User\TaskController::class, 'store'])->name('tasks.store');
@@ -78,9 +95,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::put('tasks/{task}', [User\TaskController::class, 'update'])->name('tasks.update');
             Route::delete('tasks/{task}', [User\TaskController::class, 'destroy'])->name('tasks.destroy');
             Route::put('tasks/{task}/restore', [User\TaskController::class, 'restore'])->name('tasks.restore');
-
-            Route::get('tasks/{task}/invite', [User\TaskController::class, 'inviteToTask'])->name('tasks.invite');
-            Route::post('tasks/{task}/invite-store', [User\TaskController::class, 'inviteStore'])->name('tasks.invite-store');
         });
 
     });

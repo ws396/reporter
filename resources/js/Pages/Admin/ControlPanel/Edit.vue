@@ -7,12 +7,12 @@
                 </inertia-link>
                 <span class="text-indigo-400 font-medium"> /</span> {{ form.name }}
             </h1>
-            <div class="bg-white rounded-md shadow overflow-hidden">
+            <div class="bg-white rounded-md shadow overflow-hidden p-4">
                 <breeze-validation-errors class="mb-4"/>
 
                 <form @submit.prevent="submit">
                     <div>
-                        <breeze-label for="name" value="Name"/>
+                        <breeze-label for="name" value="Имя"/>
                         <breeze-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name"/>
                     </div>
 
@@ -22,13 +22,13 @@
                     </div>
 
                     <div class="mt-4">
-                        <breeze-label for="password" value="Password"/>
+                        <breeze-label for="password" value="Пароль"/>
                         <breeze-input id="password" type="password" class="mt-1 block w-full" v-model="form.password"
                                       autocomplete="new-password"/>
                     </div>
 
                     <div class="mt-4">
-                        <breeze-label for="password_confirmation" value="Confirm Password"/>
+                        <breeze-label for="password_confirmation" value="Подтверждение пароля"/>
                         <breeze-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation"
                                       autocomplete="new-password"/>
                     </div>

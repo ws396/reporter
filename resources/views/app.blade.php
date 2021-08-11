@@ -17,6 +17,11 @@
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
+    
+    <script>
+        window.userRole = {{ Auth::user()->role }}
+    </script>
+
     <body class="font-sans antialiased">
         @inertia
 

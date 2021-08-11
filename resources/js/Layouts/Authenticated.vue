@@ -15,11 +15,15 @@
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <breeze-nav-link :href="route('user.projects')" :active="route().current('user.projects')">
+                                <breeze-nav-link :href="route('user.projects')" :active="route().current('user.*')">
                                     Список проектов
                                 </breeze-nav-link>
-                                <breeze-nav-link :href="route('admin.control-panel')" :active="route().current('admin.control-panel')">
+                                <breeze-nav-link v-if="roleCheck" :href="route('admin.control-panel')"
+                                                 :active="route().current('admin.*')">
                                     Пользователи
+                                </breeze-nav-link>
+                                <breeze-nav-link :href="route('export')" :active="route().current('export.*')">
+                                    Экспорт
                                 </breeze-nav-link>
                             </div>
                         </div>
@@ -46,7 +50,7 @@
 
                                     <template #content>
                                         <breeze-dropdown-link :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            Выйти
                                         </breeze-dropdown-link>
                                     </template>
                                 </breeze-dropdown>
@@ -71,11 +75,15 @@
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <breeze-responsive-nav-link :href="route('user.projects')" :active="route().current('user.projects')">
+                        <breeze-responsive-nav-link :href="route('user.projects')" :active="route().current('user.*')">
                             Список проектов
                         </breeze-responsive-nav-link>
-                        <breeze-responsive-nav-link :href="route('admin.control-panel')" :active="route().current('admin.control-panel')">
+                        <breeze-responsive-nav-link v-if="roleCheck"
+                                                    :href="route('admin.control-panel')" :active="route().current('admin.*')">
                             Пользователи
+                        </breeze-responsive-nav-link>
+                        <breeze-responsive-nav-link  :href="route('export')" :active="route().current('export.*')">
+                            Экспорт
                         </breeze-responsive-nav-link>
                     </div>
 
@@ -88,7 +96,7 @@
 
                         <div class="mt-3 space-y-1">
                             <breeze-responsive-nav-link :href="route('logout')" method="post" as="button">
-                                Log Out
+                                Выйти
                             </breeze-responsive-nav-link>
                         </div>
                     </div>
@@ -138,10 +146,10 @@ export default {
         BreezeResponsiveNavLink,
         FlashMessages
     },
-
     data() {
         return {
             showingNavigationDropdown: false,
+            roleCheck: window.userRole === 2 || window.userRole === 3,
         }
     },
 }

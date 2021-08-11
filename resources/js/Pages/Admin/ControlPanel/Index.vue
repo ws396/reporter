@@ -1,11 +1,11 @@
 <template>
     <breeze-authenticated-layout>
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
-            <label class="block text-gray-700">Trashed:</label>
+            <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
                 <option :value="null"/>
-                <option value="with">With Trashed</option>
-                <option value="only">Only Trashed</option>
+                <option value="with">С удалёнными</option>
+                <option value="only">Только удалённые</option>
             </select>
         </search-filter>
         <inertia-link
@@ -18,6 +18,7 @@
                 <th class="px-6 pt-6 pb-4">Имя</th>
                 <th class="px-6 pt-6 pb-4">Создан</th>
                 <th class="px-6 pt-6 pb-4">Уровень доступа</th>
+                <th class="px-6 pt-6 pb-4"></th>
             </tr>
             <tr v-for="user in users.data" :key="user.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                 <td class="border-t">
@@ -45,6 +46,15 @@
                         {{ user.role }}
                     </inertia-link>
                 </td>
+                <td class="border-t">
+                    <div class="items-center justify-center">
+                        <inertia-link
+                            class="px-3 py-2 border border-gray-200 rounded-md hover:border-gray-300"
+                                      :href="route('export', user.id)" tabindex="-1">
+                            Экспорт
+                        </inertia-link>
+                    </div>
+                </td>
                 <td class="border-t w-px">
                     <inertia-link class="px-4 flex items-center" :href="route('admin.control-panel.edit', user.id)"
                                   tabindex="-1">
@@ -53,7 +63,7 @@
                 </td>
             </tr>
             <tr v-if="users.data.length === 0">
-                <td class="border-t px-6 py-4" colspan="4">No users found.</td>
+                <td class="border-t px-6 py-4" colspan="4">Пользователи не найдены.</td>
             </tr>
         </table>
         <pagination-ping class="mt-6" :links="users.links"/>

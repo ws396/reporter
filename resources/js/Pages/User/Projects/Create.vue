@@ -56,8 +56,7 @@ export default {
     },
     methods: {
         store() {
-            console.log(this.form);
-            this.form.post(this.route('user.projects.store'))
+            this.form.post(this.route('admin.projects.store'))
         },
     }
 }

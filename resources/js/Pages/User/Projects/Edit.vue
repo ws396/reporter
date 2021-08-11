@@ -7,11 +7,11 @@
             </h1>
             <div class="bg-white rounded-md shadow overflow-hidden">
                 <trashed-message v-if="project.deleted_at" class="mb-6" @restore="restore">
-                    This project has been deleted.
+                    Этот проект был удалён.
                 </trashed-message>
                 <form @submit.prevent="update">
                     <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
-                        <text-input :id="'in1'" v-model="form.name" :error="form.errors.name" label="Project name"/>
+                        <text-input :id="'in1'" v-model="form.name" :error="form.errors.name" label="Название проекта"/>
                     </div>
                     <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
                         <button v-if="!project.deleted_at" class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Удалить
@@ -67,16 +67,16 @@ export default {
     },
     methods: {
         update() {
-            this.form.put(this.route('user.projects.update', this.project.id))
+            this.form.put(this.route('admin.projects.update', this.project.id))
         },
         destroy() {
-            if (confirm('Are you sure you want to delete this organization?')) {
-                this.$inertia.delete(this.route('user.projects.destroy', this.project.id))
+            if (confirm('Вы точно хотите удалить этот проект??')) {
+                this.$inertia.delete(this.route('admin.projects.destroy', this.project.id))
             }
         },
         restore() {
-            if (confirm('Are you sure you want to restore this organization?')) {
-                this.$inertia.put(this.route('user.projects.restore', this.project.id))
+            if (confirm('Вы точно хотите восстановить этот проект?')) {
+                this.$inertia.put(this.route('admin.projects.restore', this.project.id))
             }
         },
     }

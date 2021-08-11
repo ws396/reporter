@@ -26,7 +26,7 @@ class Task extends BaseModel
 
     public function projects()
     {
-        return $this->hasOne(Project::class);
+        return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 
     public function taskgivers()

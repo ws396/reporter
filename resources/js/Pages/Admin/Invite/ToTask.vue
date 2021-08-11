@@ -7,11 +7,11 @@
             <span class="text-indigo-400 font-medium"> /</span> Добавить к задаче
         </h1>
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
-            <label class="block text-gray-700">Trashed:</label>
+            <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
                 <option :value="null"/>
-                <option value="with">With Trashed</option>
-                <option value="only">Only Trashed</option>
+                <option value="with">С удалёнными</option>
+                <option value="only">Только удалённые</option>
             </select>
         </search-filter>
         <div
@@ -51,7 +51,7 @@
                 </td>
             </tr>
             <tr v-if="users.data.length === 0">
-                <td class="border-t px-6 py-4" colspan="4">No users found.</td>
+                <td class="border-t px-6 py-4" colspan="4">Пользователи не найдены.</td>
             </tr>
         </table>
         <pagination-ping class="mt-6" :links="users.links"/>
@@ -92,7 +92,8 @@ export default {
         form: {
             deep: true,
             handler: throttle(function () {
-                this.$inertia.get(this.route('user.projects.tasks.invite', [this.project.id, this.task.id]), pickBy(this.form), {preserveState: true})
+                this.$inertia.get(this.route('admin.projects.tasks.invite', [this.project.id, this.task.id]), pickBy(this.form), {preserveState:
+                        true})
             }, 150),
         }
     },
@@ -112,7 +113,7 @@ export default {
             this.form = mapValues(this.form, () => null)
         },
         invite() {
-            this.formInvite.post(this.route('user.projects.tasks.invite-store', [this.project.id, this.task.id]), this.formInvite.pickedUsers);
+            this.formInvite.post(this.route('admin.projects.tasks.invite-store', [this.project.id, this.task.id]), this.formInvite.pickedUsers);
         }
     }
 }

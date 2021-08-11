@@ -6,8 +6,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-class IsAdminMiddleware
+class IsLeadMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,7 +17,7 @@ class IsAdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!Auth::check() || Auth::user()->role !== User::IS_ADMIN) {
+        if(!Auth::check() || !in_array(Auth::user()->role, [User::IS_LEAD,User::IS_ADMIN])) {
             abort(403);
         }
 

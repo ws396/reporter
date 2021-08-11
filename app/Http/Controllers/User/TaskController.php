@@ -35,7 +35,11 @@ class TaskController extends Controller
             'filters' => Request::all('search', 'trashed'),
             'tasks' => $tasks,
             'users' => $project->users()->get(),
-            'project' => $project
+            'project' => $project,
+            'can' => [
+                'invite_to_task' => Auth::user()->can('lead_actions'),
+                'invite_to_project' => Auth::user()->can('lead_actions'),
+            ],
         ]); // Надо бы оптимизировать это и аналоги для фильтра. Можно писать отдельные методы для контента фильтра. Других вариантов и не вижу.
     }
 
@@ -82,7 +86,10 @@ class TaskController extends Controller
             ],
             'taskgiver' => $task->taskgivers()->first(),
             'users' => $task->users()->get(),
-            'project' => $project
+            'project' => $project,
+            'can' => [
+                'invite_to_task' => Auth::user()->can('lead_actions'),
+            ],
         ]);
     }
 
@@ -91,7 +98,6 @@ class TaskController extends Controller
         $task->lasteditor_id = Auth::id();
         $task->task_start = $request->task_start;
         $task->task_end = $request->task_end;
-        //$task->project_id = $request->project_id;
         $task->task_status = $request->task_status;
         $task->task_description = $request->task_description;
         $task->task_worktime = $request->task_worktime;
