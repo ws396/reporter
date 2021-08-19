@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
         return Inertia::render('Index');
     })->name('index');
 
-    Route::get('/export/{user?}', [User\ExportController::class, 'index'])->name('export');
+    Route::get('/export/{user}', [User\ExportController::class, 'index'])->name('export.index');
     Route::get('/export-launch/{user}', [User\ExportController::class, 'export'])->name('export.launch');
 
     Route::group([
@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'admin.'
     ], function () {
 
-        Route::get('control-panel', [Admin\UserController::class, 'index'])->name('control-panel');
+        Route::get('control-panel', [Admin\UserController::class, 'index'])->name('control-panel.index');
 
         Route::get('projects/create', [User\ProjectController::class, 'create'])->name('projects.create');
         Route::post('projects', [User\ProjectController::class, 'store'])->name('projects.store');
@@ -82,13 +82,13 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'user.'
     ], function () {
 
-        Route::get('projects', [User\ProjectController::class, 'index'])->name('projects');
+        Route::get('projects', [User\ProjectController::class, 'index'])->name('projects.index');
 
         Route::group([
             'prefix' => 'projects/{project}',
             'as' => 'projects.'
         ], function () {
-            Route::get('tasks', [User\TaskController::class, 'index'])->name('tasks');
+            Route::get('tasks', [User\TaskController::class, 'index'])->name('tasks.index');
             Route::get('tasks/create', [User\TaskController::class, 'create'])->name('tasks.create');
             Route::post('tasks', [User\TaskController::class, 'store'])->name('tasks.store');
             Route::get('tasks/{task}/edit', [User\TaskController::class, 'edit'])->name('tasks.edit');

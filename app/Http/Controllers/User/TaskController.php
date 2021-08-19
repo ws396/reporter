@@ -67,7 +67,7 @@ class TaskController extends Controller
 
         $task->users()->attach(Auth::id(), ['is_taskgiver' => true]);
 
-        return Redirect::route('user.projects.tasks', $project->id)->with('success', 'Задача #' . $task->id . ' создана.');
+        return Redirect::route('user.projects.tasks.index', $project->id)->with('success', 'Задача #' . $task->id . ' создана.');
     }
 
     public function edit(Project $project, Task $task)

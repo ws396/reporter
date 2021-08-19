@@ -28,7 +28,7 @@ class TaskRequest extends FormRequest
             'task_end' => 'required|max:255',
             'task_status' => 'required|max:255',
             'task_description' => 'max:10000',
-            'task_worktime' => 'max:255',
+            'task_worktime' => 'max:255|regex:~(\d+) ч. (\d+) мин.~',
         ];
     }
 }

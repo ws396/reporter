@@ -2,7 +2,7 @@
     <breeze-authenticated-layout>
         <div>
             <h1 class="mb-8 font-bold text-3xl">
-                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.tasks', project.id)">
+                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.tasks.index', project.id)">
                     Задачи {{ project.name }}
                 </inertia-link>
                 <span class="text-indigo-400 font-medium"> /</span> Редактировать

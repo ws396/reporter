@@ -1,5 +1,8 @@
 <template>
     <breeze-authenticated-layout>
+        <h1 class="mb-8 font-bold text-3xl">
+            Пользователи
+        </h1>
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -53,7 +56,7 @@
                     <div class="items-center justify-center">
                         <inertia-link
                             class="px-3 py-2 border border-gray-200 rounded-md hover:border-gray-300"
-                                      :href="route('export', user.id)" tabindex="-1">
+                                      :href="route('export.index', user.id)" tabindex="-1">
                             Экспорт
                         </inertia-link>
                     </div>
@@ -141,7 +144,7 @@ export default {
         form: {
             deep: true,
             handler: throttle(function () {
-                this.$inertia.get(this.route('admin.control-panel'), pickBy(this.form), {preserveState: true})
+                this.$inertia.get(this.route('admin.control-panel.index'), pickBy(this.form), {preserveState: true})
             }, 150),
         },
     },

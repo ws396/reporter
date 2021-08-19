@@ -15,13 +15,16 @@
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <breeze-nav-link :href="route('user.projects')">
+                                <breeze-nav-link :href="route('user.projects.index')"
+                                                 :active="route().current('*.projects.*')">
                                     Список проектов
                                 </breeze-nav-link>
-                                <breeze-nav-link v-if="roleCheck" :href="route('admin.control-panel')">
+                                <breeze-nav-link v-if="roleCheck" :href="route('admin.control-panel.index')"
+                                                 :active="route().current('admin.control-panel.*')">
                                     Пользователи
                                 </breeze-nav-link>
-                                <breeze-nav-link :href="route('export')">
+                                <breeze-nav-link :href="route('export.index', this.$page.props.auth.user.id)"
+                                                 :active="route().current('export.*')">
                                     Экспорт
                                 </breeze-nav-link>
                             </div>
@@ -74,13 +77,16 @@
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <breeze-responsive-nav-link :href="route('user.projects')">
+                        <breeze-responsive-nav-link :href="route('user.projects.index')"
+                                                    :active="route().current('*.projects.*')">
                             Список проектов
                         </breeze-responsive-nav-link>
-                        <breeze-responsive-nav-link v-if="roleCheck" :href="route('admin.control-panel')">
+                        <breeze-responsive-nav-link v-if="roleCheck" :href="route('admin.control-panel.index')"
+                                                    :active="route().current('admin.control-panel.*')">
                             Пользователи
                         </breeze-responsive-nav-link>
-                        <breeze-responsive-nav-link :href="route('export')">
+                        <breeze-responsive-nav-link :href="route('export.index', this.$page.props.auth.user.id)"
+                                                    :active="route().current('export.*')">
                             Экспорт
                         </breeze-responsive-nav-link>
                     </div>

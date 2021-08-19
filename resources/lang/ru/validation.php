@@ -162,5 +162,6 @@ return [
         'task_start'            => 'Начало задачи',
         'task_end'              => 'Конец задачи',
         'task_status'           => 'Статус задачи',
+        'task_worktime'         => 'Время работы',
     ],
 ];

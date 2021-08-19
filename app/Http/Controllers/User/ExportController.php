@@ -12,22 +12,19 @@ use Inertia\Inertia;
 
 class ExportController extends Controller
 {
-    public function index(User $user = null)
+    public function index(User $user)
     {
-        $currentUser = Auth::user();
+        $chosenUser = self::getValidUserOrAbort($user);
 
-        if ($user === null) {
-            $chosenUser = $currentUser;
-        } else if ($currentUser->role === User::IS_ADMIN) {
-            $chosenUser = $user;
-        } else {
-            abort(403);
-        }
+        $cb = function ($query) {
+            $query->where('name', 'like', '%' . Request::input('search') . '%');
+        };
 
         $tasks = $chosenUser->tasks()
+            ->whereHas('projects', $cb)
             ->with('projects')
             ->orderBy('task_start')
-            ->filter(Request::only('search', 'trashed'))
+            ->filterDeleted(Request::only('trashed'))
             ->paginate(10)
             ->withQueryString()
             ->through(function ($task) {
@@ -44,23 +41,28 @@ class ExportController extends Controller
         return Inertia::render('User/Export/Index', [
             'filters' => Request::all('search', 'trashed'),
             'tasks' => $tasks,
-            'user' => $chosenUser,
+            'user' => $chosenUser
         ]);
     }
 
     public function export(User $user)
     {
+        $chosenUser = self::getValidUserOrAbort($user);
+
+        return Excel::download(new TasksExport($chosenUser, Request::only('search', 'trashed')), 'Задачи ' . $chosenUser->name . '.xlsx');
+    }
+
+    private function getValidUserOrAbort($user)
+    {
         $currentUser = Auth::user();
 
         if ($currentUser->role === User::IS_ADMIN) {
-            $chosenUser = $user;
+            return $user;
         } else if ($user->id !== $currentUser->id) {
             abort(403);
-        } else {
-            $chosenUser = $user;
         }
 
-        return Excel::download(new TasksExport($chosenUser), 'Задачи ' . $chosenUser->name . '.xlsx');
+        return $user;
     }
 
 }

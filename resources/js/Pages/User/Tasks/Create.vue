@@ -2,7 +2,7 @@
     <breeze-authenticated-layout>
         <div>
             <h1 class="mb-8 font-bold text-3xl">
-                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.tasks', project.id)">
+                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.tasks.index', project.id)">
                     Задачи {{ project.name }}
                 </inertia-link>
                 <span class="text-indigo-400 font-medium"> /</span> Создать
@@ -29,9 +29,9 @@
                                     v-maska="{ mask: '#* ч. @# мин.', tokens: { '@': { pattern: /[0-5]/ }} }"/>
                         <select-input v-model="form.task_status" :error="form.errors.task_status" class="pr-6 w-full lg:w-1/2"
                                       label="Статус задачи">
-                            <option :value="0" selected>Поставлена</option>
+                            <option :value="0">Поставлена</option>
                             <option :value="1">Начата</option>
-                            <option :value="2">Выполнена</option>
+                            <option :value="2" selected>Выполнена</option>
                         </select-input>
                         <text-area :id="'in4'" v-model="form.task_description" :error="form.errors.task_description" label="Описание задачи"/>
                     </div>

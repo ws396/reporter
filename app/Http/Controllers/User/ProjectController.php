@@ -54,7 +54,7 @@ class ProjectController extends Controller
 
         $project->users()->attach(Auth::id(), ['is_lead' => true]);
 
-        return Redirect::route('user.projects')->with('success', 'Проект ' . $project->name . ' создан.');
+        return Redirect::route('user.projects.index')->with('success', 'Проект ' . $project->name . ' создан.');
     }
 
     public function edit(Project $project)

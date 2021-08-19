@@ -1,7 +1,7 @@
 <template>
     <breeze-authenticated-layout>
         <h1 class="mb-8 font-bold text-3xl">
-            <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects')">
+            <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.index')">
                 Проекты
             </inertia-link>
             <span class="text-indigo-400 font-medium"> /</span> Задачи {{ project.name }}
@@ -119,7 +119,7 @@ export default {
         form: {
             deep: true,
             handler: throttle(function () {
-                this.$inertia.get(this.route('user.projects.tasks', this.project.id), pickBy(this.form), {preserveState: true})
+                this.$inertia.get(this.route('user.projects.tasks.index', this.project.id), pickBy(this.form), {preserveState: true})
             }, 150),
         },
     },

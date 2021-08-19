@@ -2,7 +2,7 @@
     <breeze-authenticated-layout>
         <div>
             <h1 class="mb-8 font-bold text-3xl">
-                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects')">Проекты</inertia-link>
+                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.index')">Проекты</inertia-link>
                 <span class="text-indigo-400 font-medium"> /</span> Редактировать
             </h1>
             <div class="bg-white rounded-md shadow overflow-hidden">

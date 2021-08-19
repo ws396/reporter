@@ -1,5 +1,8 @@
 <template>
     <breeze-authenticated-layout>
+        <h1 class="mb-8 font-bold text-3xl">
+            Экспорт
+        </h1>
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -10,7 +13,7 @@
         </search-filter>
         <a
             class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
-            :href="route('export.launch', user.id)">Экспортировать в Excel
+            :href="route('export.launch', {user: user.id, search: this.form.search, trashed: this.form.trashed})">Экспортировать в Excel
         </a>
         <h1 class="mt-4 font-bold text-xl">Задачи пользователя {{ user.name }}</h1>
         <table class="w-full whitespace-nowrap">
@@ -82,12 +85,9 @@ export default {
         form: {
             deep: true,
             handler: throttle(function () {
-                this.$inertia.get(this.route('user.tasks'), pickBy(this.form), {preserveState: true})
+                this.$inertia.get(this.route('export.index', this.user.id), pickBy(this.form), {preserveState: true})
             }, 150),
         },
-    },
-    created() {
-        console.log(this.$page);
     },
     data: function () {
         return {

@@ -54,4 +54,15 @@ class Task extends BaseModel
             }
         });
     }
+
+    public function scopeFilterDeleted($query, array $filters)
+    {
+        $query->when($filters['trashed'] ?? null, function ($query, $trashed) {
+            if ($trashed === 'with') {
+                $query->withTrashed();
+            } elseif ($trashed === 'only') {
+                $query->onlyTrashed();
+            }
+        });
+    }
 }

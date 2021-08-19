@@ -18,15 +18,21 @@ class TasksExport implements FromCollection, WithHeadings, ShouldAutoSize
     {
         $this->chosenUser = $chosenUser;
     }
+
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
-        return $this->chosenUser->tasks()
+        $cb = function ($query) {
+            $query->where('name', 'like', '%' . Request::input('search') . '%');
+        };
+
+        $output = $this->chosenUser->tasks()
+            ->whereHas('projects', $cb)
             ->with('projects')
             ->orderBy('task_start')
-            ->filter(Request::only('search', 'trashed'))
+            ->filterDeleted(Request::only('trashed'))
             ->paginate(10)
             ->withQueryString()
             ->through(function ($task) {
@@ -42,6 +48,33 @@ class TasksExport implements FromCollection, WithHeadings, ShouldAutoSize
                     'task_description' => $task->task_description,
                 ];
             });
+
+        $worktimeHours = 0;
+        $worktimeMinutes = 0;
+        foreach ($output as $row) {
+            if (!preg_match('~(\d+) ч. (\d+) мин.~', $row['task_worktime'], $match)) {
+                break;
+            } else {
+                $worktimeHours += $match[1];
+                $worktimeMinutes += $match[2];
+            }
+        }
+        $worktimeHours += intdiv($worktimeMinutes, 60);
+        $worktimeMinutes = $worktimeMinutes % 60;
+
+        $output->push([
+            'id' => 'Сумма:',
+            'project' => '',
+            'task_start' => '',
+            'task_end' => '',
+            'task_worktime' => $worktimeHours . ' ч. ' . $worktimeMinutes . ' мин.',
+            'task_status' => '',
+            'created_at' => '',
+            'deleted_at' => '',
+            'task_description' => '',
+        ]);
+
+        return $output;
     }
 
     public function headings(): array

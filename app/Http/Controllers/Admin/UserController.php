@@ -67,7 +67,7 @@ class UserController extends Controller
 
         event(new Registered($user));
 
-        return Redirect::route('admin.control-panel')->with('success', 'User created.');
+        return Redirect::route('admin.control-panel.index')->with('success', 'User created.');
     }
 
     public function edit(User $user)
