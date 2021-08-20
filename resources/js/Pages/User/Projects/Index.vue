@@ -97,7 +97,7 @@ export default {
             deep: true,
             handler: throttle(function () {
                 this.$inertia.get(this.route('user.projects.index'), pickBy(this.form), {preserveState: true})
-            }, 150),
+            }, 500),
         },
     },
     data: function () {

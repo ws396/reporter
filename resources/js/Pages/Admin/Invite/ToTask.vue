@@ -94,7 +94,7 @@ export default {
             handler: throttle(function () {
                 this.$inertia.get(this.route('admin.projects.tasks.invite', [this.project.id, this.task.id]), pickBy(this.form), {preserveState:
                         true})
-            }, 150),
+            }, 500),
         }
     },
     data: function () {

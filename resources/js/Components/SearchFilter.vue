@@ -37,7 +37,7 @@ export default {
             default: 300,
         },
         placeholder: {
-            type: Number,
+            type: String,
             default: "Фильтр",
         },
     },
