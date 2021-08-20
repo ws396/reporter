@@ -16,7 +16,7 @@
                 </div>
                 </template>
             </dropdown>
-            <input class="relative w-full px-6 py-3 rounded-r focus:ring" autocomplete="off" type="text" name="search" placeholder="Поиск..."
+            <input class="relative w-full px-6 py-3 rounded-r focus:ring" autocomplete="off" type="text" name="search" :placeholder="placeholder"
                    :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"/>
         </div>
         <button class="ml-3 text-sm text-gray-500 hover:text-gray-700 focus:text-indigo-500" type="button" @click="$emit('reset')">Сброс</button>
@@ -35,6 +35,10 @@ export default {
         maxWidth: {
             type: Number,
             default: 300,
+        },
+        placeholder: {
+            type: Number,
+            default: "Фильтр",
         },
     },
 }

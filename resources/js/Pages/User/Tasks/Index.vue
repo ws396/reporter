@@ -19,7 +19,7 @@
                 </inertia-link>
             </div>
         </div>
-        <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
+        <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset" :placeholder="'Фильтр по ID'">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
                 <option :value="null"/>
