@@ -70,7 +70,7 @@ import Icon from '@/Components/Icon'
 import SearchFilter from '@/Components/SearchFilter'
 
 import pickBy from 'lodash/pickBy'
-import throttle from 'lodash/throttle'
+import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
 
 export default {
@@ -91,9 +91,9 @@ export default {
     watch: {
         form: {
             deep: true,
-            handler: throttle(function () {
+            handler: debounce(function () {
                 this.$inertia.get(this.route('admin.projects.tasks.invite', [this.project.id, this.task.id]), pickBy(this.form), {preserveState:
-                        true})
+                        true, only: ['users']})
             }, 500),
         }
     },

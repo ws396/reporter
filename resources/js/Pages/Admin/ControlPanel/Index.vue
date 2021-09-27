@@ -124,7 +124,7 @@ import Icon from '@/Components/Icon'
 import SearchFilter from '@/Components/SearchFilter'
 
 import pickBy from 'lodash/pickBy'
-import throttle from 'lodash/throttle'
+import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
 
 export default {
@@ -143,8 +143,8 @@ export default {
     watch: {
         form: {
             deep: true,
-            handler: throttle(function () {
-                this.$inertia.get(this.route('admin.control-panel.index'), pickBy(this.form), {preserveState: true})
+            handler: debounce(function () {
+                this.$inertia.get(this.route('admin.control-panel.index'), pickBy(this.form), {preserveState: true, only: ['users']})
             }, 500),
         },
     },
@@ -155,9 +155,6 @@ export default {
                 trashed: this.filters.trashed,
             }
         }
-    },
-    created() {
-        console.log(this.$page);
     },
     methods: {
         reset() {

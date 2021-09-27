@@ -24,7 +24,6 @@ class TaskController extends Controller
             ->through(function ($task) {
                 return [
                     'id' => $task->id,
-                    //'project' => $task->project,
                     'task_start' => $task->task_start,
                     'task_worktime' => $task->task_worktime,
                     'task_status' => $task->task_status,
@@ -42,7 +41,7 @@ class TaskController extends Controller
                 'invite_to_task' => Auth::user()->can('lead_actions'),
                 'invite_to_project' => Auth::user()->can('lead_actions'),
             ],
-        ]); // Надо бы оптимизировать это и аналоги для фильтра. Можно писать отдельные методы для контента фильтра. Других вариантов и не вижу.
+        ]);
     }
 
     public function create(Project $project)
