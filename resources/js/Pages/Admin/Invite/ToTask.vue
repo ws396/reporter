@@ -1,11 +1,7 @@
 <template>
     <breeze-authenticated-layout>
-        <h1 class="mb-8 font-bold text-3xl">
-            <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.tasks.edit', [project.id, task.id])">
-                Задача #{{ task.id }}
-            </inertia-link>
-            <span class="text-indigo-400 font-medium"> /</span> Добавить к задаче
-        </h1>
+        <breadcrumbs :items="[{ title: `Задача ${task.id}`, url: route('user.projects.tasks.edit', [project.id, task.id]) }, { title: `Добавить
+        к задаче` }]" />
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset" :placeholder="'Фильтр по имени'">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -72,9 +68,11 @@ import SearchFilter from '@/Components/SearchFilter'
 import pickBy from 'lodash/pickBy'
 import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
+import Breadcrumbs from "@/Components/Breadcrumbs";
 
 export default {
     components: {
+        Breadcrumbs,
         BreezeAuthenticatedLayout,
         BreezeButton,
         BreezeCheckbox,

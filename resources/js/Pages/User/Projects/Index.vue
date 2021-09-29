@@ -1,8 +1,6 @@
 <template>
     <breeze-authenticated-layout>
-        <h1 class="mb-8 font-bold text-3xl">
-            Проекты
-        </h1>
+        <breadcrumbs :items="[{ title: `Проекты` }]" />
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset" :placeholder="'Фильтр по названию'">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -33,6 +31,9 @@
                 <td class="border-t">
                     <inertia-link class="px-6 py-4 flex items-center"
                                   :href="route('user.projects.tasks.index', project.id)" tabindex="-1">
+                        <div class="mr-1 project-avatar flex justify-center items-center">
+                            <img :src="project.avatar" />
+                        </div>
                         {{ project.name }}
                     </inertia-link>
                 </td>
@@ -78,9 +79,11 @@ import SearchFilter from '@/Components/SearchFilter'
 import pickBy from 'lodash/pickBy'
 import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
+import Breadcrumbs from "@/Components/Breadcrumbs";
 
 export default {
     components: {
+        Breadcrumbs,
         BreezeAuthenticatedLayout,
         BreezeButton,
         PaginationPing,
@@ -107,6 +110,9 @@ export default {
                 trashed: this.filters.trashed,
             }
         }
+    },
+    created() {
+        console.log(this.projects);
     },
     methods: {
         reset() {

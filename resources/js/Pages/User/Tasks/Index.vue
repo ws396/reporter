@@ -1,11 +1,6 @@
 <template>
     <breeze-authenticated-layout>
-        <h1 class="mb-8 font-bold text-3xl">
-            <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.index')">
-                Проекты
-            </inertia-link>
-            <span class="text-indigo-400 font-medium"> /</span> Задачи {{ project.name }}
-        </h1>
+        <breadcrumbs :items="[{ title: `Проекты`, url: route('user.projects.index') }, { title: `Задачи ${project.name}` }]" />
         <div class="w-full mb-4">
             <div>
                 <h1>Участники проекта:</h1>
@@ -99,9 +94,11 @@ import SearchFilter from '@/Components/SearchFilter'
 import pickBy from 'lodash/pickBy'
 import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
+import Breadcrumbs from "@/Components/Breadcrumbs";
 
 export default {
     components: {
+        Breadcrumbs,
         BreezeAuthenticatedLayout,
         BreezeButton,
         PaginationPing,

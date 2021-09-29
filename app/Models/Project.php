@@ -5,8 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Project extends BaseModel
+class Project extends BaseModel implements HasMedia
 {
     protected $guarded = [
         '_method',
@@ -15,6 +18,7 @@ class Project extends BaseModel
 
     use HasFactory;
     use SoftDeletes;
+    use InteractsWithMedia;
 
     public function tasks()
     {
@@ -43,5 +47,19 @@ class Project extends BaseModel
                 $query->onlyTrashed();
             }
         });
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatars')
+            ->singleFile()
+            ->useFallbackUrl('/storage/images/project_placeholder.jpg');
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(60)
+            ->height(60);
     }
 }

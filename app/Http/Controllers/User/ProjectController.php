@@ -18,11 +18,13 @@ class ProjectController extends Controller
         $projects = Auth::user()->projects()
             ->orderBy('name')
             ->filter(Request::only('search', 'trashed'))
+            ->with('media')
             ->paginate(10)
             ->withQueryString()
             ->through(function ($project) {
                 return [
                     'id' => $project->id,
+                    'avatar' => $project->getFirstMediaUrl('avatars', 'thumb'),
                     'name' => $project->name,
                     'created_at' => $project->created_at,
                     'deleted_at' => $project->deleted_at,
@@ -50,6 +52,19 @@ class ProjectController extends Controller
 
         $project->name = $request->name;
 
+        if ($request->hasFile('avatar')) {
+            $project->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+        }
+        /*
+        if($request->hasFile('avatar')){
+    		$avatar = $request->file('avatar');
+    		$filename = time() . '.' . $avatar->getClientOriginalExtension();
+    		$filename->save( public_path('/uploads/avatars/' . $filename ) );
+
+    		$project->avatar = $filename;
+    	}
+        */
+
         $project->save();
 
         $project->users()->attach(Auth::id(), ['is_lead' => true]);
@@ -72,6 +87,9 @@ class ProjectController extends Controller
     public function update(Project $project, ProjectRequest $request)
     {
         $project->name = $request->name;
+        if ($request->hasFile('avatar')) {
+            $project->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+        }
 
         $project->save();
 

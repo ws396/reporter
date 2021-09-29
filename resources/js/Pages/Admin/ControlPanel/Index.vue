@@ -1,8 +1,6 @@
 <template>
     <breeze-authenticated-layout>
-        <h1 class="mb-8 font-bold text-3xl">
-            Пользователи
-        </h1>
+        <breadcrumbs :items="[{ title: `Пользователи` }]" />
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset" :placeholder="'Фильтр по имени'">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -126,9 +124,11 @@ import SearchFilter from '@/Components/SearchFilter'
 import pickBy from 'lodash/pickBy'
 import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
+import Breadcrumbs from "@/Components/Breadcrumbs";
 
 export default {
     components: {
+        Breadcrumbs,
         BreezeAuthenticatedLayout,
         BreezeButton,
         PaginationPing,

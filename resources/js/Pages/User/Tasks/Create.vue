@@ -1,12 +1,7 @@
 <template>
     <breeze-authenticated-layout>
         <div>
-            <h1 class="mb-8 font-bold text-3xl">
-                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('user.projects.tasks.index', project.id)">
-                    Задачи {{ project.name }}
-                </inertia-link>
-                <span class="text-indigo-400 font-medium"> /</span> Создать
-            </h1>
+            <breadcrumbs :items="[{ title: `Задачи ${project.name}`, url: route('user.projects.tasks.index', project.id) }, { title: `Создать` }]" />
             <div class="bg-white rounded-md shadow overflow-hidden">
                 <form @submit.prevent="store">
                     <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
@@ -58,11 +53,13 @@ import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
 import InputError from "@/Components/InputError";
+import Breadcrumbs from "@/Components/Breadcrumbs";
 
 
 export default {
     directives: {maska},
     components: {
+        Breadcrumbs,
         InputError,
         BreezeAuthenticatedLayout,
         LoadingButton,

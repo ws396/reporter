@@ -1,12 +1,7 @@
 <template>
     <breeze-authenticated-layout>
         <div>
-            <h1 class="mb-8 font-bold text-3xl">
-                <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="route('admin.control-panel.index')">
-                    Пользователи
-                </inertia-link>
-                <span class="text-indigo-400 font-medium"> /</span> Создать
-            </h1>
+            <breadcrumbs :items="[{ title: `Пользователи`, url: route('admin.control-panel.index') }, { title: `Создать` }]" />
             <div class="bg-white rounded-md shadow overflow-hidden p-4">
                 <breeze-validation-errors class="mb-4"/>
 
@@ -60,10 +55,12 @@ import BreezeInput from '@/Components/Input'
 import BreezeLabel from '@/Components/Label'
 import BreezeValidationErrors from '@/Components/ValidationErrors'
 import SelectInput from '@/Components/SelectInput'
+import Breadcrumbs from "@/Components/Breadcrumbs";
 
 export default {
 
     components: {
+        Breadcrumbs,
         BreezeAuthenticatedLayout,
         BreezeButton,
         BreezeInput,
