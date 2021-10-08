@@ -13,7 +13,7 @@ class TaskRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // Проверка уже идёт через миддлвейр
+        return true;
     }
 
     /**

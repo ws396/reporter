@@ -9,16 +9,16 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-    public function index(Project $project)
+    public function index(Project $project, Request $request)
     {
         $tasks = $project->tasks()
             ->orderBy('task_start')
-            ->filter(Request::only('search', 'trashed'))
+            ->filter($request->only('search', 'trashed'))
             ->paginate(10)
             ->withQueryString()
             ->through(function ($task) {
@@ -33,7 +33,7 @@ class TaskController extends Controller
             });
 
         return Inertia::render('User/Tasks/Index', [
-            'filters' => Request::all('search', 'trashed'),
+            'filters' => $request->only('search', 'trashed'),
             'tasks' => $tasks,
             'users' => $project->users()->get(),
             'project' => $project,
@@ -122,7 +122,7 @@ class TaskController extends Controller
         return Redirect::back()->with('success', 'Задача #' . $task->id . ' восстановлена.');
     }
 
-    public function inviteToTask(Project $project, Task $task)
+    public function inviteToTask(Project $project, Task $task, Request $request)
     {
         $users = User::whereNotIn('id', function ($query) use ($task) {
                 $query->select('user_id')
@@ -135,7 +135,7 @@ class TaskController extends Controller
                     ->where('project_id', $project->id);
             })
             ->orderBy('created_at')
-            ->filter(Request::only('search', 'trashed'))
+            ->filter($request->only('search', 'trashed'))
             ->paginate(10)
             ->withQueryString()
             ->through(function ($user) {
@@ -149,14 +149,14 @@ class TaskController extends Controller
             });
 
         return Inertia::render('Admin/Invite/ToTask', [
-            'filters' => Request::all('search', 'trashed'),
+            'filters' => $request->only('search', 'trashed'),
             'users' => $users,
             'project' => $project,
             'task' => $task,
         ]);
     }
 
-    public function inviteStore(Project $project, Task $task, \Illuminate\Http\Request $request)
+    public function inviteStore(Project $project, Task $task, Request $request)
     {
         foreach ($request->picked_users as $userId) {
             $task->users()->attach($userId);

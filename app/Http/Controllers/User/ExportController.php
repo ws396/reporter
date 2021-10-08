@@ -5,26 +5,26 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use App\Exports\TasksExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Inertia\Inertia;
 
 class ExportController extends Controller
 {
-    public function index(User $user)
+    public function index(User $user, Request $request)
     {
         $chosenUser = self::getValidUserOrAbort($user);
 
-        $cb = function ($query) {
-            $query->where('name', 'like', '%' . Request::input('search') . '%');
+        $cb = function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->search . '%');
         };
 
         $tasks = $chosenUser->tasks()
             ->whereHas('projects', $cb)
             ->with('projects')
             ->orderBy('task_start')
-            ->filterDeleted(Request::only('trashed'))
+            ->filterDeleted($request->only('trashed'))
             ->paginate(10)
             ->withQueryString()
             ->through(function ($task) {
@@ -39,17 +39,17 @@ class ExportController extends Controller
             });
 
         return Inertia::render('User/Export/Index', [
-            'filters' => Request::all('search', 'trashed'),
+            'filters' => $request->only('search', 'trashed'),
             'tasks' => $tasks,
             'user' => $chosenUser
         ]);
     }
 
-    public function export(User $user)
+    public function export(User $user, Request $request)
     {
         $chosenUser = self::getValidUserOrAbort($user);
 
-        return Excel::download(new TasksExport($chosenUser, Request::only('search', 'trashed')), 'Задачи ' . $chosenUser->name . '.xlsx');
+        return Excel::download(new TasksExport($chosenUser, $request->only('search', 'trashed')), 'Задачи ' . $chosenUser->name . '.xlsx');
     }
 
     private function getValidUserOrAbort($user)
@@ -64,5 +64,4 @@ class ExportController extends Controller
 
         return $user;
     }
-
 }

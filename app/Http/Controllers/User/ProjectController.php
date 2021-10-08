@@ -8,20 +8,27 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $projects = Auth::user()->projects()
             ->orderBy('name')
-            ->filter(Request::only('search', 'trashed'))
+            ->filter($request->only('search', 'trashed'))
             ->with('media')
             ->paginate(10)
             ->withQueryString()
             ->through(function ($project) {
+                /*
+                $output = $project->only('id', 'name', 'created_at', 'deleted_at');
+                $output['avatar'] = $project->getFirstMediaUrl('avatars', 'thumb');
+                return $output;
+
+                // Тоже вариант
+                */
                 return [
                     'id' => $project->id,
                     'avatar' => $project->getFirstMediaUrl('avatars', 'thumb'),
@@ -30,9 +37,10 @@ class ProjectController extends Controller
                     'deleted_at' => $project->deleted_at,
                 ];
             });
+        // https://laravel.com/api/8.x/Illuminate/Pagination/AbstractPaginator.html#method_through Не затирающий остальные данные аналог transform
 
         return Inertia::render('User/Projects/Index', [
-            'filters' => Request::all('search', 'trashed'),
+            'filters' => $request->only('search', 'trashed'),
             'projects' => $projects,
             'can' => [
                 'create_project' => Auth::user()->can('lead_actions'),
@@ -49,24 +57,13 @@ class ProjectController extends Controller
     public function store(ProjectRequest $request)
     {
         $project = new Project;
-
         $project->name = $request->name;
 
         if ($request->hasFile('avatar')) {
             $project->addMediaFromRequest('avatar')->toMediaCollection('avatars');
         }
-        /*
-        if($request->hasFile('avatar')){
-    		$avatar = $request->file('avatar');
-    		$filename = time() . '.' . $avatar->getClientOriginalExtension();
-    		$filename->save( public_path('/uploads/avatars/' . $filename ) );
-
-    		$project->avatar = $filename;
-    	}
-        */
 
         $project->save();
-
         $project->users()->attach(Auth::id(), ['is_lead' => true]);
 
         return Redirect::route('user.projects.index')->with('success', 'Проект ' . $project->name . ' создан.');
@@ -110,7 +107,7 @@ class ProjectController extends Controller
         return Redirect::back()->with('success', 'Проект ' . $project->name . ' восстановлен.');
     }
 
-    public function inviteToProject(Project $project)
+    public function inviteToProject(Project $project, Request $request)
     {
         $users = User::whereNotIn('id', function ($query) use ($project) {
                 $query->select('user_id')
@@ -118,7 +115,7 @@ class ProjectController extends Controller
                     ->where('project_id', $project->id);
             })
             ->orderBy('created_at')
-            ->filter(Request::only('search', 'trashed'))
+            ->filter($request->only('search', 'trashed'))
             ->paginate(10)
             ->withQueryString()
             ->through(function ($user) {
@@ -132,13 +129,13 @@ class ProjectController extends Controller
             });
 
         return Inertia::render('Admin/Invite/ToProject', [
-            'filters' => Request::all('search', 'trashed'),
+            'filters' => $request->only('search', 'trashed'),
             'users' => $users,
             'project' => $project
         ]);
     }
 
-    public function inviteStore(Project $project, \Illuminate\Http\Request $request)
+    public function inviteStore(Project $project, Request $request)
     {
         foreach ($request->picked_users as $userId) {
             $project->users()->attach($userId);

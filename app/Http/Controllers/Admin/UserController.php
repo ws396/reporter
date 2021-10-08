@@ -8,17 +8,17 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = User::orderBy('name')
-            ->filter(Request::only('search', 'trashed'))
+            ->filter($request->only('search', 'trashed'))
             ->paginate(10)
             ->withQueryString()
             ->through(function ($user) {
@@ -33,7 +33,7 @@ class UserController extends Controller
 
         return Inertia::render('Admin/ControlPanel/Index', [
             'users' => $users,
-            'filters' => Request::all('search', 'trashed'),
+            'filters' => $request->only('search', 'trashed'),
             'can' => [
                 'create_user' => Auth::user()->can('admin_actions'),
                 'edit_user' => Auth::user()->can('admin_actions'),
@@ -46,7 +46,7 @@ class UserController extends Controller
         return Inertia::render('Admin/ControlPanel/Create');
     }
 
-    public function store(\Illuminate\Http\Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -82,7 +82,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(User $user, \Illuminate\Http\Request $request)
+    public function update(User $user, Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',

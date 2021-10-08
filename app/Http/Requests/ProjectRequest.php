@@ -13,7 +13,7 @@ class ProjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // Проверка уже идёт через миддлвейр
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class ProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
+            'avatar' => 'nullable|image'
         ];
     }
 }
