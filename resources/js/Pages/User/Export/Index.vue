@@ -49,10 +49,7 @@
             </tr>
         </table>
         <pagination-ping class="mt-6" :links="tasks.links"/>
-
-
     </breeze-authenticated-layout>
-
 </template>
 
 <script>
@@ -61,11 +58,10 @@ import BreezeButton from '@/Components/Button'
 import PaginationPing from '@/Components/PaginationPing'
 import Icon from '@/Components/Icon'
 import SearchFilter from '@/Components/SearchFilter'
-
 import pickBy from 'lodash/pickBy'
 import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
-import Breadcrumbs from "@/Components/Breadcrumbs";
+import Breadcrumbs from "@/Components/Breadcrumbs"
 
 export default {
     components: {

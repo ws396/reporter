@@ -1,6 +1,9 @@
 <template>
     <breeze-authenticated-layout>
-        <breadcrumbs :items="[{ title: `Проекты`, url: route('user.projects.index') }, { title: `Создать` }]"/>
+        <breadcrumbs :items="[
+            { title: `Проекты`, url: route('user.projects.index') },
+            { title: `Создать` }
+        ]"/>
         <div class="bg-white rounded-md shadow overflow-hidden">
             <form @submit.prevent="store">
                 <div class="p-8 -mr-6 -mb-8 flex flex-wrap">

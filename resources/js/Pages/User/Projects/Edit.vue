@@ -1,6 +1,9 @@
 <template>
     <breeze-authenticated-layout>
-        <breadcrumbs :items="[{ title: `Проекты`, url: route('user.projects.index') }, { title: `Редактировать` }]"/>
+        <breadcrumbs :items="[
+            { title: `Проекты`, url: route('user.projects.index') },
+            { title: `Редактировать ${project.name}` }
+        ]"/>
         <div class="bg-white rounded-md shadow overflow-hidden">
             <trashed-message v-if="project.deleted_at" class="mb-6" @restore="restore">
                 Этот проект был удалён.

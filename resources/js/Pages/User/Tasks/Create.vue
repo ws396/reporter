@@ -1,6 +1,10 @@
 <template>
     <breeze-authenticated-layout>
-        <breadcrumbs :items="[{ title: `Задачи ${project.name}`, url: route('user.projects.tasks.index', project.id) }, { title: `Создать` }]"/>
+        <breadcrumbs :items="[
+            { title: `Проекты`, url: route('user.projects.index') },
+            { title: `Задачи ${project.name}`, url: route('user.projects.tasks.index', project.id) },
+            { title: `Создать` }
+        ]"/>
         <div class="bg-white rounded-md shadow overflow-hidden">
             <form @submit.prevent="store">
                 <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
@@ -38,20 +42,16 @@
 
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
-
 import TextInput from '@/Components/TextInput'
 import TextArea from '@/Components/TextArea'
 import SelectInput from '@/Components/SelectInput'
 import LoadingButton from '@/Components/LoadingButton'
 import {maska} from 'maska'
-
-
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
-import InputError from "@/Components/InputError";
-import Breadcrumbs from "@/Components/Breadcrumbs";
-
+import InputError from "@/Components/InputError"
+import Breadcrumbs from "@/Components/Breadcrumbs"
 
 export default {
     directives: {maska},

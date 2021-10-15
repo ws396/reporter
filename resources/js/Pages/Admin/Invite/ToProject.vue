@@ -1,6 +1,10 @@
 <template>
     <breeze-authenticated-layout>
-        <breadcrumbs :items="[{ title: project.name, url: route('user.projects.tasks.index', project.id) }, { title: `Добавить к проекту` }]" />
+        <breadcrumbs :items="[
+            { title: `Проекты`, url: route('user.projects.index') },
+            { title: project.name, url: route('user.projects.tasks.index', project.id) },
+            { title: `Добавить к проекту` }
+        ]" />
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset" :placeholder="'Фильтр по имени'">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -41,7 +45,6 @@
                     <div class="px-6 flex items-center">
                         <input type="checkbox" :value="user.id" v-model="this.formInvite.picked_users"
                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-
                     </div>
                 </td>
             </tr>
@@ -50,10 +53,7 @@
             </tr>
         </table>
         <pagination-ping class="mt-6" :links="users.links"/>
-
-
     </breeze-authenticated-layout>
-
 </template>
 
 <script>
@@ -63,11 +63,10 @@ import BreezeCheckbox from '@/Components/Checkbox'
 import PaginationPing from '@/Components/PaginationPing'
 import Icon from '@/Components/Icon'
 import SearchFilter from '@/Components/SearchFilter'
-
 import pickBy from 'lodash/pickBy'
 import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
-import Breadcrumbs from "@/Components/Breadcrumbs";
+import Breadcrumbs from "@/Components/Breadcrumbs"
 
 export default {
     components: {

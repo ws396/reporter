@@ -1,6 +1,9 @@
 <template>
     <breeze-authenticated-layout>
-        <breadcrumbs :items="[{ title: `Проекты`, url: route('user.projects.index') }, { title: `Задачи ${project.name}` }]" />
+        <breadcrumbs :items="[
+            { title: `Проекты`, url: route('user.projects.index') },
+            { title: `Задачи ${project.name}` }
+        ]" />
         <div class="w-full mb-4">
             <div>
                 <h1>Участники проекта:</h1>

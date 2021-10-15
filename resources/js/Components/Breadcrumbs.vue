@@ -4,7 +4,7 @@
             <inertia-link class="text-indigo-400 hover:text-indigo-600" :href="item.url">
                 {{ item.title }}
             </inertia-link>
-            <span class="text-indigo-400 font-medium"> /</span>
+            <span class="text-indigo-400 font-medium"> / </span>
         </template>
         {{ lastItem.title }}
     </h1>

@@ -1,7 +1,11 @@
 <template>
     <breeze-authenticated-layout>
-        <breadcrumbs :items="[{ title: `Задача ${task.id}`, url: route('user.projects.tasks.edit', [project.id, task.id]) }, { title: `Добавить
-        к задаче` }]" />
+        <breadcrumbs :items="[
+            { title: `Проекты`, url: route('user.projects.index') },
+            { title: `Задачи ${project.name}`, url: route('user.projects.tasks.index', project.id) },
+            { title: `Задача #${task.id}`, url: route('user.projects.tasks.edit', [project.id, task.id]) },
+            { title: `Добавить к задаче` }
+        ]" />
         <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset" :placeholder="'Фильтр по имени'">
             <label class="block text-gray-700">Удалённые:</label>
             <select v-model="form.trashed" class="mt-1 w-full form-select">
@@ -51,10 +55,7 @@
             </tr>
         </table>
         <pagination-ping class="mt-6" :links="users.links"/>
-
-
     </breeze-authenticated-layout>
-
 </template>
 
 <script>
@@ -64,11 +65,10 @@ import BreezeCheckbox from '@/Components/Checkbox'
 import PaginationPing from '@/Components/PaginationPing'
 import Icon from '@/Components/Icon'
 import SearchFilter from '@/Components/SearchFilter'
-
 import pickBy from 'lodash/pickBy'
 import debounce from 'lodash/debounce'
 import mapValues from 'lodash/mapValues'
-import Breadcrumbs from "@/Components/Breadcrumbs";
+import Breadcrumbs from "@/Components/Breadcrumbs"
 
 export default {
     components: {
