@@ -2,9 +2,6 @@
 
 namespace App\Exports;
 
-use App\Models\Task;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -51,6 +48,7 @@ class TasksExport implements FromCollection, WithHeadings, ShouldAutoSize
 
         $worktimeHours = 0;
         $worktimeMinutes = 0;
+
         foreach ($output as $row) {
             if (!preg_match('~(\d+) ч. (\d+) мин.~', $row['task_worktime'], $match)) {
                 break;
@@ -59,6 +57,7 @@ class TasksExport implements FromCollection, WithHeadings, ShouldAutoSize
                 $worktimeMinutes += $match[2];
             }
         }
+
         $worktimeHours += intdiv($worktimeMinutes, 60);
         $worktimeMinutes = $worktimeMinutes % 60;
 

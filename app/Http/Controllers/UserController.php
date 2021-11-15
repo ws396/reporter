@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::orderBy('name')
-            ->filter($request->only('search', 'trashed'))
+            ->filterByColumn($request->only('search', 'trashed'), 'name')
             ->paginate(10)
             ->withQueryString()
             ->through(function ($user) {
@@ -86,17 +86,18 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => ['confirmed', Rules\Password::defaults()],
-            'role' => 'integer'
+            'role' => 'integer',
+            'password' => ['confirmed', Rules\Password::defaults()]
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->role = $request->role;
+
         if($request->password) {
             $user->password = Hash::make($request->password);
             $user->remember_token = Str::random(60);
         }
-        $user->role = $request->role;
 
         $user->save();
 

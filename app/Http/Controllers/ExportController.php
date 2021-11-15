@@ -48,18 +48,20 @@ class ExportController extends Controller
     {
         $chosenUser = self::getValidUserOrAbort($user);
 
-        return Excel::download(new TasksExport($chosenUser, $request->only('search', 'trashed')), 'Задачи ' . $chosenUser->name . '.xlsx');
+        return Excel::download(
+            new TasksExport($chosenUser, $request->only('search', 'trashed')),
+            'Задачи ' . $chosenUser->name . '.xlsx'
+        );
     }
 
     private function getValidUserOrAbort($user)
     {
         $currentUser = Auth::user();
 
-        if ($currentUser->role === User::IS_ADMIN) {
+        if ($currentUser->role === User::IS_ADMIN)
             return $user;
-        } else if ($user->id !== $currentUser->id) {
+        else if ($user->id !== $currentUser->id)
             abort(403);
-        }
 
         return $user;
     }

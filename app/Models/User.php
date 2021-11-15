@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Traits\FiltersTrait;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, FiltersTrait;
 
     public const IS_USER = 1;
     public const IS_LEAD = 2;
@@ -48,19 +49,6 @@ class User extends Authenticatable
     public function getCreatedAtAttribute($date)
     {
         return $date !== null ? Carbon::parse($date)->format('d-m-Y H:i:s') : $date;
-    }
-
-    public function scopeFilter($query, array $filters)
-    {
-        $query->when($filters['search'] ?? null, function ($query, $search) {
-            $query->where('name', 'like', '%' . $search . '%');
-        })->when($filters['trashed'] ?? null, function ($query, $trashed) {
-            if ($trashed === 'with') {
-                $query->withTrashed();
-            } elseif ($trashed === 'only') {
-                $query->onlyTrashed();
-            }
-        });
     }
 
     public function tasks()

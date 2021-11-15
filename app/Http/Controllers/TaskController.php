@@ -17,7 +17,7 @@ class TaskController extends Controller
     {
         $tasks = $project->tasks()
             ->orderBy('task_start')
-            ->filter($request->only('search', 'trashed'))
+            ->filterByColumn($request->only('search', 'trashed'), 'id')
             ->paginate(10)
             ->withQueryString()
             ->through(function ($task) {
@@ -62,7 +62,6 @@ class TaskController extends Controller
         $task->task_worktime = $request->task_worktime;
 
         $task->save();
-
         $task->users()->attach(Auth::id(), ['is_taskgiver' => true]);
 
         return Redirect::route('user.projects.tasks.index', $project->id)->with('success', 'Задача #' . $task->id . ' создана.');
@@ -93,7 +92,7 @@ class TaskController extends Controller
         ]);
     }
 
-    public function update(Project $project, Task $task, TaskRequest $request)
+    public function update(Task $task, TaskRequest $request)
     {
         $task->lasteditor_id = Auth::id();
         $task->task_start = $request->task_start;
@@ -107,14 +106,14 @@ class TaskController extends Controller
         return Redirect::back()->with('success', 'Задача #' . $task->id . ' обновлена.');
     }
 
-    public function destroy(Project $project, Task $task)
+    public function destroy(Task $task)
     {
         $task->delete();
 
         return Redirect::back()->with('success', 'Задача #' . $task->id . ' удалена.');
     }
 
-    public function restore(Project $project, Task $task)
+    public function restore(Task $task)
     {
         $task->restore();
 
@@ -134,7 +133,7 @@ class TaskController extends Controller
                     ->where('project_id', $project->id);
             })
             ->orderBy('created_at')
-            ->filter($request->only('search', 'trashed'))
+            ->filterByColumn($request->only('search', 'trashed'), 'id')
             ->paginate(10)
             ->withQueryString()
             ->through(function ($user) {
@@ -157,9 +156,7 @@ class TaskController extends Controller
 
     public function inviteStore(Project $project, Task $task, Request $request)
     {
-        foreach ($request->picked_users as $userId) {
-            $task->users()->attach($userId);
-        }
+        foreach ($request->picked_users as $userId) $task->users()->attach($userId);
 
         return Redirect::back()->with('success', 'Пользователи добавлены к задаче #' . $task->id);
     }

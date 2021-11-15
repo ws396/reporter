@@ -16,7 +16,7 @@ class ProjectController extends Controller
     {
         $projects = Auth::user()->projects()
             ->orderBy('name')
-            ->filter($request->only('search', 'trashed'))
+            ->filterByColumn($request->only('search', 'trashed'), 'name')
             ->with('media')
             ->paginate(10)
             ->withQueryString()
@@ -58,9 +58,7 @@ class ProjectController extends Controller
         $project = new Project;
         $project->name = $request->name;
 
-        if ($request->hasFile('avatar')) {
-            $project->addMediaFromRequest('avatar')->toMediaCollection('avatars');
-        }
+        if ($request->hasFile('avatar')) $project->addMediaFromRequest('avatar')->toMediaCollection('avatars');
 
         $project->save();
         $project->users()->attach(Auth::id(), ['is_lead' => true]);
@@ -83,9 +81,8 @@ class ProjectController extends Controller
     public function update(Project $project, ProjectRequest $request)
     {
         $project->name = $request->name;
-        if ($request->hasFile('avatar')) {
-            $project->addMediaFromRequest('avatar')->toMediaCollection('avatars');
-        }
+
+        if ($request->hasFile('avatar')) $project->addMediaFromRequest('avatar')->toMediaCollection('avatars');
 
         $project->save();
 
@@ -114,7 +111,7 @@ class ProjectController extends Controller
                     ->where('project_id', $project->id);
             })
             ->orderBy('created_at')
-            ->filter($request->only('search', 'trashed'))
+            ->filterByColumn($request->only('search', 'trashed'), 'name')
             ->paginate(10)
             ->withQueryString()
             ->through(function ($user) {
@@ -136,9 +133,7 @@ class ProjectController extends Controller
 
     public function inviteStore(Project $project, Request $request)
     {
-        foreach ($request->picked_users as $userId) {
-            $project->users()->attach($userId);
-        }
+        foreach ($request->picked_users as $userId) $project->users()->attach($userId);
 
         return Redirect::back()->with('success', 'Пользователи добавлены к проекту ' . $project->name);
     }

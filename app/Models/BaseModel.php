@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Traits\FiltersTrait;
 
 class BaseModel extends Model
 {
+    use FiltersTrait;
+
     // Accessors
     public function getCreatedAtAttribute($date)
     {
