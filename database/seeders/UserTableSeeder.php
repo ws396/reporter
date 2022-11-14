@@ -19,9 +19,9 @@ class UserTableSeeder extends Seeder
     {
         $data = [
             [
-                'name'      => 'ws396',
-                'email'     => 'ws@sentro.ru',
-                'password'  => Hash::make('s93jf7wjd'),
+                'name'      => 'admin',
+                'email'     => 'example@example.com',
+                'password'  => Hash::make('admin'),
                 'role' => User::IS_ADMIN
             ],
         ];
